@@ -1,0 +1,60 @@
+@using PCGuy.Common.Entities
+@model ProductViewModel
+
+@{
+    ViewBag.Title = "Add New Product";
+}
+
+<div class="row pb-2">
+    <h4 class="text-uppercase">Add New Product</h4>
+</div>
+<div class="row mb-3">
+    <div class="col-4">
+        <a asp-action="Index" asp-controller="Product" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
+        </a>
+    </div>
+</div>
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="mb-3">
+            <label asp-for="Product.Name"></label>
+            <input asp-for="Product.Name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Product.Description"></label>
+            <input asp-for="Product.Description" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Product.Specifications"></label>
+            <input asp-for="Product.Specifications" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Product.Price"></label>
+            <input asp-for="Product.Price" class="form-control" required>
+        </div>
+        @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Product.BrandId, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Product.BrandId, Model.Brands, new { @class = "form-select" })
+        </div>
+        <div class="mb-3">
+            <label asp-for="Product.ModelNumber"></label>
+            <input asp-for="Product.ModelNumber" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.Subcategories, new { @class = "form-select" })
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
+            </div>
+            <div class="col-4">
+                <a asp-action="Index" asp-controller="Product" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>

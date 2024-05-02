@@ -24,15 +24,13 @@ if (app.Environment.IsDevelopment())
     
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
-    await SeedData.Initialize(services);
+    // await SeedData.Initialize(services);
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-
-   
 }
 
 app.UseHttpsRedirection();
@@ -42,6 +40,22 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "products",
+    pattern: "products/peripherals",
+    defaults: new { controller = "Product", action = "Index", id = 3 });
+app.MapControllerRoute(
+    name: "products",
+    pattern: "products/pc-parts",
+    defaults: new { controller = "Product", action = "Index", id = 2 });
+app.MapControllerRoute(
+    name: "products",
+    pattern: "products/software",
+    defaults: new { controller = "Product", action = "Index", id = 1 });
+app.MapControllerRoute(
+    name: "products",
+    pattern: "products/{id?}",
+    defaults: new { controller = "Product", action="Index" });
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Mvc.Models;
 
 namespace PCGuy.Mvc.Controllers;
@@ -23,9 +24,14 @@ public class HomeController : Controller
         return View();
     }
 
+    private void Open(string link)
+    {
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+    
 }

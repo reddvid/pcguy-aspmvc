@@ -6,6 +6,7 @@ namespace PCGuy.Common.Entities;
 
 public class Brand
 {
+    [Key]
     public int Id { get; set; }
     public string? Name { get; set; }
 }
