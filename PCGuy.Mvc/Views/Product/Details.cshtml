@@ -1,0 +1,22 @@
+@using System.Globalization
+@model PCGuy.Common.Entities.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<!DOCTYPE html>
+
+<div class="container">
+    <dic class="row">
+        <div class="col-md-6">
+
+        </div>
+        <div class="col-md-6">
+            <h4>@Model.Name</h4>
+            <p class="text-primary-emphasis">@Model.Price.ToString("C", new CultureInfo("en-PH"))</p>
+            <p class="text-primary">@Model.Brand.Name</p>
+            <a href="#" class="btn btn-primary">Add to cart</a>
+        </div>
+    </dic>
+</div>

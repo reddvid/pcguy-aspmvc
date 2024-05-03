@@ -1,0 +1,16 @@
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PCGuy.Common.Entities
+@model Product
+
+<a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">
+    <div class="card mb-3">
+        <div class="card-body">
+            <h4 class="card-title">@Model.Name</h4>
+            <h6 class="card-subtitle mb-2 text-muted">@(Model.Price.ToString("C", new CultureInfo("en-PH")))</h6>
+            <p class="card-text">@Model.Description</p>
+            <a href="#" class="btn-info btn">Edit</a>
+            <a asp-route-id="@Model.Id" asp-action="Delete" class="btn btn-danger ms-2">Delete</a>
+        </div>
+    </div>
+</a>

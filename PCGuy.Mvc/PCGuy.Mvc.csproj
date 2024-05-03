@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PCGuy.Common\PCGuy.Common.csproj" />
+      <ProjectReference Include="..\PCGuy.DataAccess\PCGuy.DataAccess.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,7 +31,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\" />
+      <Folder Include="Views\Brand\" />
     </ItemGroup>
 
 </Project>

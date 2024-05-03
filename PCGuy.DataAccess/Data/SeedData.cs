@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PCGuy.Common.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace PCGuy.Mvc.Data;
+namespace PCGuy.DataAccess.Data;
 
 public class SeedData
 {

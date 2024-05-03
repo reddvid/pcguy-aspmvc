@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Common.Entities;
-using PCGuy.Mvc.Data;
+using PCGuy.DataAccess.Data;
 using PCGuy.Mvc.Models;
 
 namespace PCGuy.Mvc.Controllers;
@@ -33,7 +33,7 @@ public class ProductController(ApplicationDbContext context) : Controller
         return View(filteredProducts);
     }
 
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         var productViewModel = new ProductViewModel
         {
@@ -53,6 +53,8 @@ public class ProductController(ApplicationDbContext context) : Controller
         await context.Products.AddAsync(viewModel.Product);
         await context.SaveChangesAsync();
 
+        TempData["success"] = "Product added successfully";
+
         int idProducts = GetReturnId(viewModel.Product.SubcategoryId);
         
         return RedirectToAction("Index", new { id = idProducts });
@@ -68,6 +70,8 @@ public class ProductController(ApplicationDbContext context) : Controller
         await context.SaveChangesAsync();
 
         int idProducts = GetReturnId(product.SubcategoryId);
+        
+        TempData["success"] = "Product deleted successfully";
         
         return RedirectToAction("Index", new { id = idProducts });
     }
@@ -114,5 +118,12 @@ public class ProductController(ApplicationDbContext context) : Controller
                 Text = x.Name
             });
         return subCategories;
+    }
+    
+    public async Task<IActionResult> Details(int? id)
+    {
+        var products = await context.Products.Include("Brand").Include("Subcategory").ToListAsync();
+        var product = products.Find(x => x.Id == id);
+        return View(product);
     }
 }

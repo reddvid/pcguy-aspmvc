@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using PCGuy.Common.Entities;
-using PCGuy.Mvc.Data;
+using PCGuy.DataAccess.Data;
 
 namespace PCGuy.Mvc.Controllers;
 

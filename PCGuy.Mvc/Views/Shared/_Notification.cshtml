@@ -1,0 +1,21 @@
+@if (TempData["success"] is not null && string.IsNullOrWhiteSpace(TempData["success"]?.ToString()))
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.success("@TempData["success"]");
+    </script>
+}
+
+@if (TempData["error"] is not null && string.IsNullOrWhiteSpace(TempData["error"]?.ToString()))
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript">
+        toastr.error("@TempData["error"]");
+    </script>
+}
+
+@section Scripts {
+
+}

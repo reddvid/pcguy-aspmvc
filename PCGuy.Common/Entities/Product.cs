@@ -17,9 +17,11 @@ public class Product
     public double Discount { get; set; }
     public bool IsOnSale => Discount > 0;
     [ForeignKey("BrandId")]
+    [DisplayName("Brand")]
     public int BrandId { get; set; }
     public Brand Brand { get; set; }
     [ForeignKey("SubcategoryId")]
+    [DisplayName("Subcategory")]
     public int SubcategoryId { get; set; }
     public Subcategory Subcategory { get; set; }
 

@@ -1,11 +1,10 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PCGuy.Common.Entities;
 
-namespace PCGuy.Mvc.Data;
+namespace PCGuy.DataAccess.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
 {
     public DbSet<Category> Categories { get; set; }
     public DbSet<Subcategory> Subcategories { get; set; }

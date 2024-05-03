@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PCGuy.Mvc.Data;
+using PCGuy.DataAccess.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
