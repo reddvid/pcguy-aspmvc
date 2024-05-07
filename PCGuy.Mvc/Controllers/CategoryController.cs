@@ -3,18 +3,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using PCGuy.Common.Entities;
 using PCGuy.DataAccess.Data;
+using PCGuy.DataAccess.Repository;
 
 namespace PCGuy.Mvc.Controllers;
 
-public class CategoryController(ApplicationDbContext context) : Controller
+public class CategoryController(ICategoryRepository categoryRepository) : Controller
 {
-    private readonly ApplicationDbContext _context = context;
-
+    private readonly ICategoryRepository _categoryRepository;
+    
     // GET
     [Route("categories")]
     public async Task<IActionResult> Index()
     {
-        var categories = await _context.Categories.ToListAsync();
+        var categories = await _categoryRepository.GetAll();
         return View(categories);
     }
 
