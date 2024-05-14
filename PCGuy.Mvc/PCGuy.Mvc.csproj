@@ -30,8 +30,4 @@
       <AdditionalFiles Include="Views\Category\Index.cshtml" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Views\Brand\" />
-    </ItemGroup>
-
 </Project>

@@ -2,15 +2,28 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using PCGuy.Common.Entities
 @model Product
+<div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+    <a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4 class="card-title">@Model.Name</h4>
+                <h6 class="card-subtitle mb-2 text-muted">@(Model.Price.ToString("C", new CultureInfo("en-PH")))</h6>
 
-<a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">
-    <div class="card mb-3">
-        <div class="card-body">
-            <h4 class="card-title">@Model.Name</h4>
-            <h6 class="card-subtitle mb-2 text-muted">@(Model.Price.ToString("C", new CultureInfo("en-PH")))</h6>
-            <p class="card-text">@Model.Description</p>
-            <a href="#" class="btn-info btn">Edit</a>
-            <a asp-route-id="@Model.Id" asp-action="Delete" class="btn btn-danger ms-2">Delete</a>
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <p class="card-text">
+                        @Model.Description
+                    </p>
+                }
+                else
+                {
+                    <p class="card-text">
+                        &nbsp;
+                    </p>
+                }
+                <a href="#" class="btn-outline-info btn">Edit</a>
+                <a asp-route-id="@Model.Id" asp-action="Delete" class="btn btn-danger ms-2">Delete</a>
+            </div>
         </div>
-    </div>
-</a>
+    </a>
+</div>

@@ -1,8 +1,8 @@
 @using PCGuy.Common.Entities
-@model IEnumerable<Category>
+@model IEnumerable<Subcategory>
 
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Subcategories";
 }
 
 
@@ -12,7 +12,7 @@
     </div>
     <div class="col-6 text-end ">
         <a asp-controller="Product" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i><span class="ms-2">Add Category</span>
+            <i class="bi bi-plus-circle"></i><span class="ms-2">Add Subcategory</span>
         </a>
     </div>
 </div>
@@ -25,11 +25,11 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var category in Model)
+        @foreach (var subcategory in Model)
         {
             <tr>
                 <td class="col-8">
-                    @category.Name
+                    @subcategory.Name
                 </td>
                 <td class="col-4">
                     <a class="btn btn-outline-info">Edit</a>

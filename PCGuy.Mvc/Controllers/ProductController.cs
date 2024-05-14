@@ -7,34 +7,54 @@ using PCGuy.Common.Entities;
 using PCGuy.DataAccess.Data;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Mvc.Models;
+using Index = System.Index;
 
 namespace PCGuy.Mvc.Controllers;
 
 public class ProductController(IUnitOfWork unitOfWork) : Controller
 {
+    [Route("products")]
+    public async Task<IActionResult> Index()
+    {
+        var products = await unitOfWork.Product
+            .GetAllAsQuery()
+            .Include("Subcategory")
+            .Include("Subcategory.Category").ToListAsync();
+
+        ViewData["Title"] = "Products";
+        
+        return View(products);
+    }
+    
+    [Route("products/{id}")]
     public async Task<IActionResult> Index(int id)
     {
         Console.WriteLine($"ID {id}");
-        
-        var filteredProducts = await unitOfWork.Product
+
+        var products = await unitOfWork.Product
             .GetAllAsQuery()
             .Include("Subcategory")
-            .Include("Subcategory.Category")
-            .Where(p => p.Subcategory.Category.Id == id)
-            .ToListAsync();
-        
+            .Include("Subcategory.Category").ToListAsync();
+
+        if (id > 0)
+        {
+            products = products.Where(p => p.Subcategory.Category.Id == id)
+                .ToList();
+        }
+
         ViewData["Title"] = id switch
         {
             1 => "Software",
             2 => "PC Parts",
             3 => "Peripherals",
             4 => "Accessories",
-            _ => ViewData["Title"]
+            0 => "All Products",
+            _ => "Unknown"
         };
 
         TempData["ProductsViewId"] = id;
-        
-        return View(filteredProducts);
+
+        return View(products);
     }
 
     public IActionResult Create(int id)
@@ -46,12 +66,12 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
             Brands = GetBrands(),
             Subcategories = GetSubcategories()
         };
-        
+
         Console.WriteLine(productViewModel.CategoryId);
-        
+
         return View(productViewModel);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> Create(ProductViewModel viewModel)
     {
@@ -61,23 +81,23 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         TempData["success"] = "Product added successfully";
 
         var idProducts = GetReturnId(viewModel.Product.SubcategoryId);
-        
+
         return RedirectToAction("Index", new { id = idProducts });
     }
-    
+
     public async Task<IActionResult> Delete(int id)
     {
         var product = await unitOfWork.Product.Get(x => x.Id == id);
 
         if (product is null) return NotFound();
-        
+
         unitOfWork.Product.Remove(product);
         await unitOfWork.Save();
 
         int idProducts = GetReturnId(product.SubcategoryId);
-        
+
         TempData["success"] = "Product deleted successfully";
-        
+
         return RedirectToAction("Index", new { id = idProducts });
     }
 
@@ -87,7 +107,7 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
             .GetAllAsQuery()
             .Include("Category")
             .FirstOrDefault(p => p.Id == productSubcategoryId);
-        
+
         return subcategory?.CategoryId ?? 2;
     }
 
@@ -129,7 +149,7 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
             });
         return subCategories;
     }
-    
+
     public async Task<IActionResult> Details(int? id)
     {
         var products = await unitOfWork.Product
@@ -137,7 +157,7 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
             .Include("Brand")
             .Include("Subcategory")
             .ToListAsync();
-        
+
         var product = products.Find(x => x.Id == id);
         return View(product);
     }
