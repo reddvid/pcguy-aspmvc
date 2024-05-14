@@ -5,8 +5,10 @@ namespace PCGuy.Mvc.Models;
 
 public class ProductViewModel
 {
-    public Product Product { get; set; }
-    public IEnumerable<SelectListItem> Categories { get; set; }
-    public IEnumerable<SelectListItem> Brands { get; set; }
-    public IEnumerable<SelectListItem> Subcategories { get; set; }
+    public int CategoryId { get; init; }
+    public string? CategoryName { get; init; }
+    public Product Product { get; init; } = default!;
+    public IEnumerable<SelectListItem> Categories { get; init; } = default!;
+    public IEnumerable<SelectListItem> Brands { get; init; } = default!;
+    public IEnumerable<SelectListItem> Subcategories { get; init; } = default!;
 }

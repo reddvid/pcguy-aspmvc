@@ -7,15 +7,13 @@ using PCGuy.DataAccess.Repository;
 
 namespace PCGuy.Mvc.Controllers;
 
-public class CategoryController(ICategoryRepository categoryRepository) : Controller
+public class CategoryController(IUnitOfWork unitOfWork) : Controller
 {
-    private readonly ICategoryRepository _categoryRepository;
-    
     // GET
     [Route("categories")]
     public async Task<IActionResult> Index()
     {
-        var categories = await _categoryRepository.GetAll();
+        var categories = await unitOfWork.Category.GetAll();
         return View(categories);
     }
 

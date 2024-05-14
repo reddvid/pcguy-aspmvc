@@ -4,25 +4,23 @@ using PCGuy.DataAccess.Data;
 
 namespace PCGuy.DataAccess.Repository;
 
-public class Repository<T> : IRepository<T> where T : class
+public class Repository<T>(ApplicationDbContext db) : IRepository<T>
+    where T : class
 {
-    private readonly ApplicationDbContext _db;
-    internal DbSet<T> _dbSet;
-    
-    
-    public Repository(ApplicationDbContext db)
-    {
-        _db = db;
-        _dbSet = _db.Set<T>();
-    }
-    
+    private readonly DbSet<T> _dbSet = db.Set<T>();
+
     public async Task<IEnumerable<T>> GetAll()
     {
         IQueryable<T> query = _dbSet;
         return await query.ToListAsync();
     }
 
-    public async Task<T> Get(Expression<Func<T, bool>> filter)
+    public IQueryable<T> GetAllAsQuery()
+    {
+        return _dbSet;
+    }
+
+    public async Task<T?> Get(Expression<Func<T, bool>> filter)
     {
         IQueryable<T> query = _dbSet;
         query = query.Where(filter);

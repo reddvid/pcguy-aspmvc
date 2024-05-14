@@ -7,13 +7,5 @@ public class CategoryRepository(ApplicationDbContext db) : Repository<Category>(
 {
     private readonly ApplicationDbContext _db = db;
 
-    public void Update(Category category)
-    {
-        _db.Categories.Update(category);
-    }
-
-    public async Task Save()
-    {
-        await _db.SaveChangesAsync();
-    }
+    public void Update(Category category) => _db.Categories.Update(category);
 }

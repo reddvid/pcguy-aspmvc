@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Add New Product";
+    Console.WriteLine($"View {Model.CategoryId}");
 }
 
 <div class="row pb-2">
@@ -10,7 +11,7 @@
 </div>
 <div class="row mb-3">
     <div class="col-4">
-        <a asp-action="Index" asp-controller="Product" class="btn btn-outline-secondary">
+        <a asp-action="Index" asp-controller="Product" asp-route-id="@Model.CategoryId" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
         </a>
     </div>
@@ -55,7 +56,7 @@
                 <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
             </div>
             <div class="col-4">
-                <a asp-action="Index" asp-controller="Product" class="btn btn-outline-secondary">
+                <a asp-action="Index" asp-controller="Product" asp-route-id="@Model.CategoryId" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
                 </a>
             </div>

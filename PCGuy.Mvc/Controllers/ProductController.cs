@@ -5,22 +5,24 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Common.Entities;
 using PCGuy.DataAccess.Data;
+using PCGuy.DataAccess.Repository;
 using PCGuy.Mvc.Models;
 
 namespace PCGuy.Mvc.Controllers;
 
-public class ProductController(ApplicationDbContext context) : Controller
+public class ProductController(IUnitOfWork unitOfWork) : Controller
 {
-    // GET
     public async Task<IActionResult> Index(int id)
     {
-        Console.WriteLine("ID" + id);
-        var filteredProducts = await context.Products
+        Console.WriteLine($"ID {id}");
+        
+        var filteredProducts = await unitOfWork.Product
+            .GetAllAsQuery()
             .Include("Subcategory")
             .Include("Subcategory.Category")
             .Where(p => p.Subcategory.Category.Id == id)
             .ToListAsync();
-
+        
         ViewData["Title"] = id switch
         {
             1 => "Software",
@@ -30,44 +32,47 @@ public class ProductController(ApplicationDbContext context) : Controller
             _ => ViewData["Title"]
         };
 
+        TempData["ProductsViewId"] = id;
+        
         return View(filteredProducts);
     }
 
-    public IActionResult Create()
+    public IActionResult Create(int id)
     {
         var productViewModel = new ProductViewModel
         {
+            CategoryId = id,
             Categories = GetCategories(),
             Brands = GetBrands(),
             Subcategories = GetSubcategories()
         };
-
+        
+        Console.WriteLine(productViewModel.CategoryId);
+        
         return View(productViewModel);
     }
     
     [HttpPost]
     public async Task<IActionResult> Create(ProductViewModel viewModel)
     {
-        if (viewModel.Product is null) return NotFound();
-        
-        await context.Products.AddAsync(viewModel.Product);
-        await context.SaveChangesAsync();
+        await unitOfWork.Product.Add(viewModel.Product);
+        await unitOfWork.Save();
 
         TempData["success"] = "Product added successfully";
 
-        int idProducts = GetReturnId(viewModel.Product.SubcategoryId);
+        var idProducts = GetReturnId(viewModel.Product.SubcategoryId);
         
         return RedirectToAction("Index", new { id = idProducts });
     }
     
     public async Task<IActionResult> Delete(int id)
     {
-        var product = await context.Products.FindAsync(id);
+        var product = await unitOfWork.Product.Get(x => x.Id == id);
 
         if (product is null) return NotFound();
         
-        context.Products.Remove(product);
-        await context.SaveChangesAsync();
+        unitOfWork.Product.Remove(product);
+        await unitOfWork.Save();
 
         int idProducts = GetReturnId(product.SubcategoryId);
         
@@ -78,17 +83,20 @@ public class ProductController(ApplicationDbContext context) : Controller
 
     private int GetReturnId(int productSubcategoryId)
     {
-        return context.Subcategories
+        var subcategory = unitOfWork.Subcategory
+            .GetAllAsQuery()
             .Include("Category")
-            .FirstOrDefault(p => p.Id == productSubcategoryId)!
-            .CategoryId;
+            .FirstOrDefault(p => p.Id == productSubcategoryId);
+        
+        return subcategory?.CategoryId ?? 2;
     }
 
     // ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc
 
     private IEnumerable<SelectListItem> GetCategories()
     {
-        var categories = context.Categories
+        var categories = unitOfWork.Category
+            .GetAllAsQuery()
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -100,7 +108,8 @@ public class ProductController(ApplicationDbContext context) : Controller
 
     private IEnumerable<SelectListItem> GetBrands()
     {
-        var brands = context.Brands
+        var brands = unitOfWork.Brand
+            .GetAllAsQuery()
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -111,7 +120,8 @@ public class ProductController(ApplicationDbContext context) : Controller
 
     private IEnumerable<SelectListItem> GetSubcategories()
     {
-        var subCategories = context.Subcategories
+        var subCategories = unitOfWork.Subcategory
+            .GetAllAsQuery()
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -122,7 +132,12 @@ public class ProductController(ApplicationDbContext context) : Controller
     
     public async Task<IActionResult> Details(int? id)
     {
-        var products = await context.Products.Include("Brand").Include("Subcategory").ToListAsync();
+        var products = await unitOfWork.Product
+            .GetAllAsQuery()
+            .Include("Brand")
+            .Include("Subcategory")
+            .ToListAsync();
+        
         var product = products.Find(x => x.Id == id);
         return View(product);
     }
