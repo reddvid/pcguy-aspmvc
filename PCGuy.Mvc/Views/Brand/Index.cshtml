@@ -5,28 +5,36 @@
     ViewData["Title"] = "Brands";
 }
 
-<h1>@ViewData["Title"]</h1>
 
 <div class="row mb-3 ">
-    <div class="col-6"></div>
+    <div class="col-6">
+        <h1>@ViewData["Title"]</h1>
+    </div>
     <div class="col-6 text-end ">
         <a asp-controller="Product" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i><span class="ms-2">Add Brand</span>
         </a>
     </div>
 </div>
-<div class="row">
+<div class="row mb-5">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var brand in Model)
         {
             <tr>
-                <td>@brand.Name</td>
+                <td class="col-8">
+                    @brand.Name
+                </td>
+                <td class="col-4 text-end">
+                    <a class="link-info">Edit</a>
+                    <a class="link-danger ms-2">Delete</a>
+                </td>
             </tr>
         }
         </tbody>

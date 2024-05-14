@@ -39,7 +39,7 @@
             @Html.LabelFor(m => m.Product.BrandId, new { @class = "form-label" })
             @Html.DropDownListFor(m => m.Product.BrandId, Model.Brands, new { @class = "form-select mb-3", id = "brand-select" })
             <input class="form-control mb-3 visually-hidden" id="brand-input" type="text"/>
-            <button class="btn btn-primary" asp-action="Index" asp-controller="Brand">Add New</button>
+            <a class="btn btn-primary" asp-action="Index" target="_blank" asp-controller="Brand">Add New</a>
         </div>
         <div class="mb-3">
             <label asp-for="Product.ModelNumber"></label>
@@ -49,7 +49,7 @@
             @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
             @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.Subcategories, new { @class = "form-select mb-3", id = "subcat-select" })
             <input class="form-control mb-3 visually-hidden" id="subcat-input" type="text"/>
-            <button class="btn btn-primary" type="button" onclick="goToSubcategory()" asp-action="Index" asp-controller="Subcategory">Add New</button>
+            <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
         </div>
         <div class="row">
             <div class="col-4">

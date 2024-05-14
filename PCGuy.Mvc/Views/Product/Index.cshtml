@@ -13,9 +13,39 @@
         </a>
     </div>
 </div>
-<div class="row">
-    @foreach (var p in Model)
-    {
-        <partial name="_ProductItem" model="p"/>
-    }
-</div>
+@if (ViewData["Title"]!.Equals("All Products"))
+{
+    <div class="row">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td class="col-8">
+                        @product.Name
+                    </td>
+                    <td class="col-4 text-end">
+                        <a class="link-info">Edit</a>
+                        <a class="link-danger ms-2">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            <partial name="_ProductItem" model="product"/>
+        }
+    </div>
+}
