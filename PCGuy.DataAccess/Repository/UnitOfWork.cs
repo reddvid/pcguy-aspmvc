@@ -19,7 +19,7 @@ public class UnitOfWork : IUnitOfWork
         Brand = new BrandRepository(_db);
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         await _db.SaveChangesAsync();
     }

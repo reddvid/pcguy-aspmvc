@@ -5,10 +5,10 @@ namespace PCGuy.DataAccess.Repository;
 
 public interface IRepository<T> where T : class
 {
-    public Task<IEnumerable<T>> GetAll();
+    public Task<IEnumerable<T>> GetAllAsync();
     public IQueryable<T> GetAllAsQuery();
-    public Task<T?> Get(Expression<Func<T, bool>> filter);
-    public Task Add(T entity);
+    public Task<T?> GetAsync(Expression<Func<T, bool>> filter);
+    public Task AddAsync(T entity);
     public void Remove(T entity);
     public void RemoveRange(IEnumerable<T> entities);
 }

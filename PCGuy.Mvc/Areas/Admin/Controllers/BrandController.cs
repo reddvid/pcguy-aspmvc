@@ -1,19 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using PCGuy.Common.Entities;
-using PCGuy.DataAccess.Data;
 using PCGuy.DataAccess.Repository;
 
-namespace PCGuy.Mvc.Controllers;
+namespace PCGuy.Mvc.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class BrandController(IUnitOfWork unitOfWork) : Controller
 {
     // GET
     [Route("brands")]
     public async Task<IActionResult> Index()
     {
-        var brands = await unitOfWork.Brand.GetAll();
+        var brands = await unitOfWork.Brand.GetAllAsync();
         brands = brands.OrderBy(a => a.Name);
         return View(brands);
     }

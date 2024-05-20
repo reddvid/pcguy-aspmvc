@@ -36,6 +36,10 @@ body {
   white-space: nowrap;
 }
 
+.navbar {
+  flex-direction: column !important;
+}
+
 @media only screen and (min-width: 600px) and (max-width: 1200px) {
   body {
     margin-bottom: 480px;

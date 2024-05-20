@@ -6,10 +6,10 @@ namespace PCGuy.DataAccess.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
 {
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Subcategory> Subcategories { get; set; }
-    public DbSet<Brand> Brands { get; set; }
-    public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Categories { get; init; }
+    public DbSet<Subcategory> Subcategories { get; init; }
+    public DbSet<Brand> Brands { get; init; }
+    public DbSet<Product> Products { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -22,7 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new() { Id = 5, Name = "Others" },
         };
 
-        var subCategories = new List<Subcategory>
+        var subcategories = new List<Subcategory>
         {
             new() { Id = 1, Name = "Audio", CategoryId = categories[2].Id },
             new() { Id = 2, Name = "Monitors", CategoryId = categories[2].Id },
@@ -79,42 +79,47 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new()
             {
                 Id = 1,
-                Name = "AMD Ryzen 5 5700X", UploadDate = DateTime.Now, Price = 11_000,
+                Name = "AMD Ryzen 5 5700X",  
+                Price = 11_000,
                 BrandId = brands[0].Id,
-                SubcategoryId = subCategories[15].Id
+                SubcategoryId = subcategories[15].Id
             },
             new()
             {
                 Id = 2,
-                Name = "MSI B550 PRO-VDH WIFI", UploadDate = DateTime.Now, Price = 2_500,
+                Name = "MSI B550 PRO-VDH WIFI", 
+                Price = 2_500,
                 BrandId = brands[15].Id,
-                SubcategoryId = subCategories[16].Id
+                SubcategoryId = subcategories[16].Id
             },
             new()
             {
                 Id = 3,
-                Name = "SilverStone PF240-ARGB", UploadDate = DateTime.Now, Price = 1_500,
+                Name = "SilverStone PF240-ARGB", 
+                Price = 1_500,
                 BrandId = brands[21].Id,
-                SubcategoryId = subCategories[17].Id
+                SubcategoryId = subcategories[17].Id
             },
             new()
             {
                 Id = 4,
-                Name = "HyperX Fury 16GB", UploadDate = DateTime.Now, Price = 2_500,
+                Name = "HyperX Fury 16GB", 
+                Price = 2_500,
                 BrandId = brands[16].Id,
-                SubcategoryId = subCategories[10].Id
+                SubcategoryId = subcategories[10].Id
             },
             new()
             {
                 Id = 5,
-                Name = "Samsung 970 EVO Plus", UploadDate = DateTime.Now, Price = 4_500,
+                Name = "Samsung 970 EVO Plus", 
+                Price = 4_500,
                 BrandId = brands[6].Id,
-                SubcategoryId = subCategories[14].Id
+                SubcategoryId = subcategories[14].Id
             },
         };
         
         modelBuilder.Entity<Category>().HasData(categories);
-        modelBuilder.Entity<Subcategory>().HasData(subCategories);
+        modelBuilder.Entity<Subcategory>().HasData(subcategories);
         modelBuilder.Entity<Brand>().HasData(brands);
         modelBuilder.Entity<Product>().HasData(products);
 

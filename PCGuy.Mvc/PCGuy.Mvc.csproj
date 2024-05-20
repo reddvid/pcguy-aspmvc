@@ -19,6 +19,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4"/>
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,7 +28,24 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Category\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Brand\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Product\Create.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Product\Details.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Product\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Product\_ProductItem.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Subcategory\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Customer\Views\Home\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Customer\Views\Home\Privacy.cshtml" />
+      <AdditionalFiles Include="Areas\Customer\Views\Home\_FeaturedItem.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Controllers\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Brand\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Subcategory\Index.cshtml" />
     </ItemGroup>
 
 </Project>

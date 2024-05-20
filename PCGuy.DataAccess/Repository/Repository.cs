@@ -9,7 +9,7 @@ public class Repository<T>(ApplicationDbContext db) : IRepository<T>
 {
     private readonly DbSet<T> _dbSet = db.Set<T>();
 
-    public async Task<IEnumerable<T>> GetAll()
+    public async Task<IEnumerable<T>> GetAllAsync()
     {
         IQueryable<T> query = _dbSet;
         return await query.ToListAsync();
@@ -20,14 +20,14 @@ public class Repository<T>(ApplicationDbContext db) : IRepository<T>
         return _dbSet;
     }
 
-    public async Task<T?> Get(Expression<Func<T, bool>> filter)
+    public async Task<T?> GetAsync(Expression<Func<T, bool>> filter)
     {
         IQueryable<T> query = _dbSet;
         query = query.Where(filter);
         return await query.FirstOrDefaultAsync();
     }
 
-    public async Task Add(T entity)
+    public async Task AddAsync(T entity)
     {
        await _dbSet.AddAsync(entity);
     }

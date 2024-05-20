@@ -1,13 +1,11 @@
-@using PCGuy.Common.Entities
 @model ProductViewModel
 
 @{
-    ViewBag.Title = "Add New Product";
-    Console.WriteLine($"View {Model.CategoryId}");
+    ViewBag.Title = "Edit";
 }
 
 <div class="row pb-2">
-    <h4 class="text-uppercase">Add New Product</h4>
+    <h4 class="text-uppercase">Edit Product</h4>
 </div>
 <div class="row mb-3">
     <div class="col-4">
@@ -16,7 +14,8 @@
         </a>
     </div>
 </div>
-<form method="post">
+<form method="post" class="row" enctype="multipart/form-data">
+    <input asp-for="Product.Id" hidden/>
     <div class="border p-3 mt-4">
         <div class="mb-3">
             <label asp-for="Product.Name"></label>
@@ -24,22 +23,26 @@
         </div>
         <div class="mb-3">
             <label asp-for="Product.Description"></label>
-            <input asp-for="Product.Description" class="form-control" required>
+            <input asp-for="Product.Description" class="form-control" >
         </div>
         <div class="mb-3">
             <label asp-for="Product.Specifications"></label>
-            <input asp-for="Product.Specifications" class="form-control" required>
+            <input asp-for="Product.Specifications" class="form-control" >
         </div>
         <div class="mb-3">
             <label asp-for="Product.Price"></label>
             <input asp-for="Product.Price" class="form-control" required>
         </div>
+        <div class="mb-3 form-floating py-2 col-12">
+            <input type="file" class="form-control border-0 shadow"/>
+            <label asp-for="Product.FeaturedImage" class="ms-2"></label>
+        </div>
         @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
         <div class="mb-3">
             @Html.LabelFor(m => m.Product.BrandId, new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Product.BrandId, Model.Brands, new { @class = "form-select mb-3", id = "brand-select" })
+            @Html.DropDownListFor(m => m.Product.BrandId, Model.BrandListItems, new { @class = "form-select mb-3", id = "brand-select" })
             <input class="form-control mb-3 visually-hidden" id="brand-input" type="text"/>
-            <a class="btn btn-primary" asp-action="Index" target="_blank" asp-controller="Brand">Add New</a>
+            <a class="btn btn-primary" asp-action="Index" target="_blank" asp-controller="Brand">Add New Brand</a>
         </div>
         <div class="mb-3">
             <label asp-for="Product.ModelNumber"></label>
@@ -47,13 +50,13 @@
         </div>
         <div class="mb-3">
             @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.Subcategories, new { @class = "form-select mb-3", id = "subcat-select" })
+            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.SubcategoryListItems, new { @class = "form-select mb-3", id = "subcat-select" })
             <input class="form-control mb-3 visually-hidden" id="subcat-input" type="text"/>
-            <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
+            <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New Subcategory</a>
         </div>
         <div class="row">
             <div class="col-4">
-                <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
+                <button type="submit" class="btn btn-primary" style="width: 280px;">Update</button>
             </div>
             <div class="col-4">
                 <a asp-action="Index" asp-controller="Product" asp-route-id="@Model.CategoryId" class="btn btn-outline-secondary">
@@ -65,6 +68,10 @@
 </form>
 
 @section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+
     <script type="text/javascript">
         function goToSubcategory() {
             document.location = "../../subcategories";

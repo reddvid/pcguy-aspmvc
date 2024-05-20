@@ -1,14 +1,11 @@
-@using System.Globalization
-@using PCGuy.Common.Entities
 @model List<Product>
-
 
 <div class="row mb-3 ">
     <div class="col-6">
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="col-6 text-end ">
-        <a asp-controller="Product" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
+        <a asp-controller="Product" asp-action="Create" asp-route-id="@TempData["ProductSubcategoryId"]" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i><span class="ms-2">Add Product</span>
         </a>
     </div>
@@ -31,7 +28,7 @@
                         @product.Name
                     </td>
                     <td class="col-4 text-end">
-                        <a class="link-info">Edit</a>
+                        <a class="link-info" asp-action="Edit" asp-route-id="@product.Id" asp-controller="Product">Edit</a>
                         <a class="link-danger ms-2">Delete</a>
                     </td>
                 </tr>

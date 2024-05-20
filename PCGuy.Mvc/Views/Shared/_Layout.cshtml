@@ -17,10 +17,25 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/pcguylogo.png" alt="PC Guy" height="50"/>
-            </a>
+        <div class="container nav-row1">
+            <div class="col-auto">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/pcguylogo.png" alt="PC Guy" height="50"/>
+                </a>
+            </div>
+            <div class="col-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Find products" aria-label="Find products" aria-describedby="">
+                    <div class="input-group-append">
+                        <a class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <partial name="_LoginPartial" />
+            </div>
+        </div>
+        <div class="container nav-row2">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -28,27 +43,27 @@
             <div class="navbar-collapse collapse" id="navbarColor02">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link " asp-area="Customer" asp-controller="Home" asp-action="Index">
                             Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Product" asp-action="Index" asp-route-id="0">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-id="0">
                             Products
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Category" asp-action="Index">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">
                             Categories
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Subcategory" asp-action="Index">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Subcategory" asp-action="Index">
                             Subcategories
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Brand" asp-action="Index">
+                        <a class="nav-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">
                             Brands
                         </a>
                     </li>
@@ -104,7 +119,6 @@
                         </div>
                     </li>
                 </ul>
-                <partial name="_LoginPartial"/>
             </div>
         </div>
     </nav>

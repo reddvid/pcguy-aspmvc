@@ -1,10 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Mvc.Models;
 
-namespace PCGuy.Mvc.Controllers;
+namespace PCGuy.Mvc.Areas.Customer.Controllers;
 
+[Area("Customer")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -22,10 +22,6 @@ public class HomeController : Controller
     public IActionResult Privacy()
     {
         return View();
-    }
-
-    private void Open(string link)
-    {
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

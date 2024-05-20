@@ -1,0 +1,42 @@
+@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="row mb-3 ">
+    <div class="col-6">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+    <div class="col-6 text-end ">
+        <a asp-controller="Category" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i><span class="ms-2">Add Category</span>
+        </a>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>
+                    @category.Name
+                </td>
+                <td>
+                    <div class="w-75 btn-group" role="group">
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="link-info mx-2">Edit</a>
+                        <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="link-danger mx-2">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

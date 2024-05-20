@@ -6,26 +6,30 @@ namespace PCGuy.Common.Entities;
 
 public class Product
 {
-    [Key]
-    public int Id { get; set; }
-    public DateTime UploadDate { get; set; } = DateTime.Now;
-    public string[]? ImagePaths { get; set; }
-    public required string? Name { get; set; } 
-    public string? Description { get; set; } 
-    public string? Specifications { get; set; }
-    public required float Price { get; set; }
-    public double Discount { get; set; }
+    [Key] public int Id { get; init; }
+    public DateTime UploadDate { get; private set; } = DateTime.Now;
+    public string? FeaturedImage { get; init; }
+    public string[]? ImagePaths { get; init; }
+    public required string? Name { get; init; }
+    public string? Description { get; init; }
+    public string? Specifications { get; init; }
+    public required float Price { get; init; }
+    public double Discount { get; init; }
     public bool IsOnSale => Discount > 0;
+
     [ForeignKey("BrandId")]
     [DisplayName("Brand")]
-    public int BrandId { get; set; }
-    public Brand Brand { get; set; }
+    public int BrandId { get; init; }
+
+    public Brand? Brand { get; init; }
+
     [ForeignKey("SubcategoryId")]
     [DisplayName("Subcategory")]
-    public int SubcategoryId { get; set; }
-    public Subcategory Subcategory { get; set; }
+    public int SubcategoryId { get; init; }
 
-    [DisplayName("Model Name")] public string? ModelName { get; set; } 
-    [DisplayName("Model Number")] public string? ModelNumber { get; set; } 
-    public string[]? Tags { get; set; }
+    public Subcategory? Subcategory { get; init; }
+
+    [DisplayName("Model Name")] public string? ModelName { get; init; }
+    [DisplayName("Model Number")] public string? ModelNumber { get; init; }
+    public string[]? Tags { get; init; }
 }

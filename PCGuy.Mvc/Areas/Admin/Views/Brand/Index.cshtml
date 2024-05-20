@@ -1,10 +1,9 @@
 @using PCGuy.Common.Entities
-@model IEnumerable<Category>
+@model IEnumerable<Brand>
 
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Brands";
 }
-
 
 <div class="row mb-3 ">
     <div class="col-6">
@@ -12,11 +11,11 @@
     </div>
     <div class="col-6 text-end ">
         <a asp-controller="Product" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i><span class="ms-2">Add Category</span>
+            <i class="bi bi-plus-circle"></i><span class="ms-2">Add Brand</span>
         </a>
     </div>
 </div>
-<div class="row">
+<div class="row mb-5">
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
@@ -25,11 +24,11 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var category in Model)
+        @foreach (var brand in Model)
         {
             <tr>
                 <td class="col-8">
-                    @category.Name
+                    @brand.Name
                 </td>
                 <td class="col-4 text-end">
                     <a class="link-info">Edit</a>

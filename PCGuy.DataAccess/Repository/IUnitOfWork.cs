@@ -9,5 +9,5 @@ public interface IUnitOfWork
     ISubcategoryRepository Subcategory { get; }    
     IBrandRepository Brand { get; }
 
-    Task Save();
+    Task SaveAsync();
 }
