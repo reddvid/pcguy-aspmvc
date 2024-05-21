@@ -24,12 +24,14 @@
             @foreach (var product in Model)
             {
                 <tr>
-                    <td class="col-8">
+                    <td >
                         @product.Name
                     </td>
-                    <td class="col-4 text-end">
-                        <a class="link-info" asp-action="Edit" asp-route-id="@product.Id" asp-controller="Product">Edit</a>
-                        <a class="link-danger ms-2">Delete</a>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                            <a class="link-info mx-2" asp-action="Edit" asp-route-id="@product.Id" asp-controller="Product">Edit</a>
+                            <a class="link-danger ms-2">Delete</a>
+                        </div>
                     </td>
                 </tr>
             }

@@ -154,13 +154,8 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         await unitOfWork.SaveAsync();
 
         TempData["success"] = "Product added successfully";
-        
-        Product? product = await unitOfWork.Product.GetAsync(x => x.Id == viewModel.Product.Id);
-        if (product is null) return NotFound();
-        
-        int productsBySubcategory = GetReturnId(product.SubcategoryId);
 
-        return RedirectToAction("Index", new { id = productsBySubcategory });
+        return RedirectToAction("Index", new { id = 0 });
     }
 
     public async Task<IActionResult> Delete(int? id)
