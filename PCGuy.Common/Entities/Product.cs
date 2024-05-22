@@ -10,10 +10,10 @@ public class Product
     public DateTime UploadDate { get; private set; } = DateTime.Now;
     public string? FeaturedImage { get; init; }
     public string[]? ImagePaths { get; init; }
-    public required string? Name { get; init; }
+    public string? Name { get; init; }
     public string? Description { get; init; }
     public string? Specifications { get; init; }
-    public required float Price { get; init; }
+    public float Price { get; init; }
     public double Discount { get; init; }
     public bool IsOnSale => Discount > 0;
 

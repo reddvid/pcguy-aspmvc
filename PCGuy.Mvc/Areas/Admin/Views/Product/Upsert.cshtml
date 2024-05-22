@@ -2,21 +2,21 @@
 
 @{
     ViewBag.Title = "Add New Product";
-    Console.WriteLine($"View {Model.CategoryId}");
 }
 
 <div class="row pb-2">
-    <h4 class="text-uppercase">Add New Product</h4>
+    <h4 class="text-uppercase">@(Model.Product.Id is not 0 ? "Update" : "Create New") Product</h4>
 </div>
 <div class="row mb-3">
     <div class="col-4">
-        <a asp-action="Index" asp-controller="Product" asp-route-id="@Model.CategoryId" class="btn btn-outline-secondary">
+        <a asp-action="Index" asp-controller="Product" asp-route-id="0" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
         </a>
     </div>
 </div>
 <form method="post" class="row" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
+        <input asp-for="Product.Id" hidden />
         <div class="mb-3">
             <label asp-for="Product.Name"></label>
             <input asp-for="Product.Name" class="form-control" required>
@@ -46,12 +46,12 @@
         </div>
         <div class="mb-3">
             <label asp-for="Product.ModelNumber"></label>
-            <input asp-for="Product.ModelNumber" class="form-control" >
+            <input asp-for="Product.ModelNumber" class="form-control">
         </div>
         <div class="mb-3">
             @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.SubcategoryListItems, new { @class = "form-select mb-3", id = "subcat-select" })
-            <input class="form-control mb-3 visually-hidden" id="subcat-input" type="text"/>
+            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.SubcategoryListItems, new { @class = "form-select mb-3", id = "sc-select" })
+            <input class="form-control mb-3 visually-hidden" id="sc-input" type="text"/>
             <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
         </div>
         <div class="row">
@@ -59,7 +59,7 @@
                 <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
             </div>
             <div class="col-4">
-                <a asp-action="Index" asp-controller="Product" asp-route-id="@Model.CategoryId" class="btn btn-outline-secondary">
+                <a asp-action="Index" asp-controller="Product" asp-route-id="0" class="btn btn-outline-secondary">
                     <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Products List</span>
                 </a>
             </div>

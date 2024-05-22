@@ -29,7 +29,6 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Areas\Admin\Views\Brand\Index.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Product\Create.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\_ProductItem.cshtml" />

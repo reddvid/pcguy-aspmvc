@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Common.Entities;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Mvc.Models;
@@ -45,7 +46,7 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         var subcategory = subcategories.Find(o => o.Id == id);
         if (subcategory is null) return View(products);
 
-        var filteredProductsBySubcategory = products.Where(p => p.Subcategory?.Category.Id == id)
+        var filteredProductsBySubcategory = products.Where(p => p.Subcategory?.Category?.Id == id)
             .ToList();
 
         ViewData["Title"] = subcategory.Name;
@@ -54,7 +55,7 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         return View(filteredProductsBySubcategory);
     }
 
-    public IActionResult Create(int categoryId)
+    public async Task<IActionResult> Upsert(int? id)
     {
         var categoryList = unitOfWork.Category
             .GetAllAsQuery()
@@ -82,17 +83,26 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
 
         var productViewModel = new ProductViewModel
         {
-            CategoryId = categoryId,
+            Product = new Product(),
             CategoryListItems = categoryList,
             BrandListItems = brandList,
             SubcategoryListItems = subcategoryList,
         };
 
+        if (id is null or 0)
+        {
+            // Create
+            return View(productViewModel);
+        }
+
+        // Edit
+        productViewModel.Product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+
         return View(productViewModel);
     }
 
-    [HttpPost, ActionName("Create")]
-    public async Task<IActionResult> CreatePOST(ProductViewModel viewModel)
+    [HttpPost, ActionName("UpsertPOST")]
+    public async Task<IActionResult> UpsertPOST(ProductViewModel viewModel, IFormFile? file)
     {
         await unitOfWork.Product.AddAsync(viewModel.Product);
         await unitOfWork.SaveAsync();
