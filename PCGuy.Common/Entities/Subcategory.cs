@@ -8,11 +8,8 @@ namespace PCGuy.Common.Entities;
 public class Subcategory
 {
     [Key] public int Id { get; init; }
-    public string? Name { get; init; }
+    [Required] public string? Name { get; init; }
 
-    [ForeignKey("CategoryId")]
-    [DisplayName("Category")]
     public int CategoryId { get; init; }
-
-    public Category? Category { get; init; }
+    [ForeignKey("CategoryId")] public Category? Category { get; init; }
 }

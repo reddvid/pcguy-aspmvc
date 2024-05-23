@@ -9,7 +9,7 @@ using PCGuy.Mvc.Models;
 namespace PCGuy.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
-public class ProductController(IUnitOfWork unitOfWork) : Controller
+public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment) : Controller
 {
     [Route("products")]
     public async Task<IActionResult> Index()
@@ -57,14 +57,6 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
 
     public async Task<IActionResult> Upsert(int? id)
     {
-        var categoryList = unitOfWork.Category
-            .GetAllAsQuery()
-            .Select(x => new SelectListItem
-            {
-                Value = x.Id.ToString(),
-                Text = x.Name
-            });
-
         var brandList = unitOfWork.Brand
             .GetAllAsQuery()
             .Select(x => new SelectListItem
@@ -84,7 +76,6 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         var productViewModel = new ProductViewModel
         {
             Product = new Product(),
-            CategoryListItems = categoryList,
             BrandListItems = brandList,
             SubcategoryListItems = subcategoryList,
         };
@@ -101,30 +92,43 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
         return View(productViewModel);
     }
 
-    [HttpPost, ActionName("UpsertPOST")]
+    [HttpPost, ActionName("Upsert")]
     public async Task<IActionResult> UpsertPOST(ProductViewModel viewModel, IFormFile? file)
     {
-        await unitOfWork.Product.AddAsync(viewModel.Product);
-        await unitOfWork.SaveAsync();
-
-        TempData["success"] = "Product added successfully";
-
-        var idProducts = GetReturnId(viewModel.Product.SubcategoryId);
-
-        return RedirectToAction("Index", new { id = idProducts });
-    }
-
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id is null or 0) return NotFound();
-        
-        var categoryList = unitOfWork.Category
-            .GetAllAsQuery()
-            .Select(x => new SelectListItem
+        if (ModelState.IsValid)
+        {
+            var wwwRootPath = webHostEnvironment.WebRootPath;
+            if (file is not null)
             {
-                Value = x.Id.ToString(),
-                Text = x.Name
-            });
+                var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                var productPath = Path.Combine(wwwRootPath, @"images\product");
+
+                if (!string.IsNullOrEmpty(viewModel.Product.FeaturedImage))
+                {
+                    var oldImagePath = Path.Combine(wwwRootPath, viewModel.Product.FeaturedImage.TrimStart('\\'));
+                    
+                    if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
+                }
+
+                await using var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create);
+                await file.CopyToAsync(fileStream);
+
+                viewModel.Product!.FeaturedImage = @"\images\product\" + fileName;
+            }
+
+            if (viewModel.Product.Id == 0)
+            {
+                await unitOfWork.Product.AddAsync(viewModel.Product);
+            }
+            else
+            {
+                unitOfWork.Product.Update(viewModel.Product);
+            }
+            
+            await unitOfWork.SaveAsync();
+            TempData["success"] = "Product added successfully";
+            return RedirectToAction("Index");
+        }
 
         var brandList = unitOfWork.Brand
             .GetAllAsQuery()
@@ -142,30 +146,10 @@ public class ProductController(IUnitOfWork unitOfWork) : Controller
                 Text = x.Name
             });
 
-        var product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        viewModel.BrandListItems = brandList;
+        viewModel.SubcategoryListItems = subcategoryList;
+        return View(viewModel);
 
-        if (product is null) return NotFound();
-
-        var productViewModel = new ProductViewModel
-        {
-            Product = product,
-            CategoryListItems = categoryList,
-            BrandListItems = brandList,
-            SubcategoryListItems = subcategoryList,
-        };
-
-        return View(productViewModel);
-    }
-
-    [HttpPost, ActionName("Edit")]
-    public async Task<IActionResult> EditPOST(ProductViewModel viewModel)
-    {
-        unitOfWork.Product.Update(viewModel.Product);
-        await unitOfWork.SaveAsync();
-
-        TempData["success"] = "Product added successfully";
-
-        return RedirectToAction("Index", new { id = 0 });
     }
 
     public async Task<IActionResult> Delete(int? id)

@@ -9,7 +9,7 @@
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="col-6 text-end ">
-        <a asp-controller="Category" asp-action="Create" asp-route-id="@TempData["ProductsViewId"]" class="btn btn-primary">
+        <a asp-controller="Category" asp-action="Upsert" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i><span class="ms-2">Add Category</span>
         </a>
     </div>
@@ -31,7 +31,7 @@
                 </td>
                 <td>
                     <div class="w-75 btn-group" role="group">
-                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="link-info mx-2">Edit</a>
+                        <a asp-controller="Category" asp-action="Upsert" asp-route-id="@category.Id" class="link-info mx-2">Edit</a>
                         <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="link-danger mx-2">Delete</a>
                     </div>
                 </td>

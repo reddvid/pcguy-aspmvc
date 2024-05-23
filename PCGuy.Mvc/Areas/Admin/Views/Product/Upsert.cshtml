@@ -16,47 +16,63 @@
 </div>
 <form method="post" class="row" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
-        <input asp-for="Product.Id" hidden />
-        <div class="mb-3">
-            <label asp-for="Product.Name"></label>
-            <input asp-for="Product.Name" class="form-control" required>
+        <input asp-for="Product.Id" hidden/>
+        <input asp-for="Product.FeaturedImage" hidden/>
+        <div class="row">
+            <div class="col-9">
+                <div class="mb-3">
+                    <label asp-for="Product.Name"></label>
+                    <input asp-for="Product.Name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" class="form-control" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.Specifications"></label>
+                    <textarea asp-for="Product.Specifications" class="form-control" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.Price"></label>
+                    <input asp-for="Product.Price" class="form-control" required>
+                </div>
+                <div class="mb-3 form-floating py-2 col-12">
+                    <input type="file" name="file" class="form-control border-0 shadow"/>
+                    <label asp-for="Product.FeaturedImage" class="ms-2"></label>
+                </div>
+                @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Product.BrandId, new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.Product.BrandId, Model.BrandListItems, new { @class = "form-select mb-3", id = "brand-select" })
+                    <input class="form-control mb-3 visually-hidden" id="brand-input" type="text"/>
+                    <a class="btn btn-primary" asp-action="Index" target="_blank" asp-controller="Brand">Add New</a>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Product.ModelNumber"></label>
+                    <input asp-for="Product.ModelNumber" class="form-control">
+                </div>
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
+                    @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.SubcategoryListItems, new { @class = "form-select mb-3", id = "sc-select" })
+                    <input class="form-control mb-3 visually-hidden" id="sc-input" type="text"/>
+                    <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
+                </div>
+            </div>
+            <div class="col-3">
+                <img src="@Model.Product.FeaturedImage" alt="@(Model.Product.Name) Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;"/>
+            </div>
         </div>
-        <div class="mb-3">
-            <label asp-for="Product.Description"></label>
-            <input asp-for="Product.Description" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Product.Specifications"></label>
-            <input asp-for="Product.Specifications" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Product.Price"></label>
-            <input asp-for="Product.Price" class="form-control" required>
-        </div>
-        <div class="mb-3 form-floating py-2 col-12">
-            <input type="file" class="form-control border-0 shadow"/>
-            <label asp-for="Product.FeaturedImage" class="ms-2"></label>
-        </div>
-        @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Product.BrandId, new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Product.BrandId, Model.BrandListItems, new { @class = "form-select mb-3", id = "brand-select" })
-            <input class="form-control mb-3 visually-hidden" id="brand-input" type="text"/>
-            <a class="btn btn-primary" asp-action="Index" target="_blank" asp-controller="Brand">Add New</a>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Product.ModelNumber"></label>
-            <input asp-for="Product.ModelNumber" class="form-control">
-        </div>
-        <div class="mb-3">
-            @Html.LabelFor(m => m.Product.SubcategoryId, new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.Product.SubcategoryId, Model.SubcategoryListItems, new { @class = "form-select mb-3", id = "sc-select" })
-            <input class="form-control mb-3 visually-hidden" id="sc-input" type="text"/>
-            <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
-        </div>
+
         <div class="row">
             <div class="col-4">
-                <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
+                @if (Model.Product.Id != 0)
+                {
+                    <button type="submit" class="btn btn-primary" style="width: 280px;">Update</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary" style="width: 280px;">Create</button>
+                }
             </div>
             <div class="col-4">
                 <a asp-action="Index" asp-controller="Product" asp-route-id="0" class="btn btn-outline-secondary">
@@ -71,28 +87,23 @@
     @{
         <partial name="_ValidationScriptsPartial"/>
     }
-    
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
     <script type="text/javascript">
         function goToSubcategory() {
             document.location = "../../subcategories";
         }
     </script>
-
-    @* <script type="text/javascript"> *@
-    @* $(document).ready(function() { *@
-    @*     $("#subcat-input").hide(); *@
-    @*     $("#brand-input").hide(); *@
-    @* }); *@
-    @*      *@
-    @* function ShowSubCatInput() { *@
-    @*     $("#subcat-select").hide(); *@
-    @*     $("#subcat-input").show(); *@
-    @* } *@
-    @* *@
-    @* function ShowBrandInput() { *@
-    @*     $("#brand-select").hide(); *@
-    @*     $("#brand-input").show(); *@
-    @* } *@
-    @* *@
-    @* </script> *@
 }

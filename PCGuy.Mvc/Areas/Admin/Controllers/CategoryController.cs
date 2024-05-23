@@ -15,12 +15,20 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
         return View(categories);
     }
 
-    public IActionResult Create()
+    public async Task<IActionResult> Upsert(int? id)
     {
-        return View();
+        var category = new Category();
+        
+        if (id is null or 0)
+        {
+            return View(category);
+        }
+        
+        category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+        return View(category);
     }
 
-    [HttpPost, ActionName("Create")]
+    [HttpPost, ActionName("Upsert")]
     public async Task<IActionResult> CreatePOST(Category category)
     {
         if (!ModelState.IsValid) return View();
@@ -30,25 +38,6 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id is null or 0) return NotFound();
-
-        Category? category = await unitOfWork.Category.GetAsync(o => o.Id == id);
-        if (category is null) return NotFound();
-
-        return View(category);
-    }
-
-    [HttpPost, ActionName("Edit")]
-    public async Task<IActionResult> EditPOST(Category category)
-    {
-        if (!ModelState.IsValid) return View();
-
-        unitOfWork.Category.Update(category);
-        await unitOfWork.SaveAsync();
-        return RedirectToAction("Index");
-    }
 
     public async Task<IActionResult> Delete(int? id)
     {
