@@ -36,9 +36,9 @@
                     <label asp-for="Product.Price"></label>
                     <input asp-for="Product.Price" class="form-control" required>
                 </div>
-                <div class="mb-3 form-floating py-2 col-12">
-                    <input type="file" name="file" class="form-control border-0 shadow"/>
-                    <label asp-for="Product.FeaturedImage" class="ms-2"></label>
+                <div class="mb-3">
+                    <label asp-for="Product.FeaturedImage"></label>
+                    <input type="file" name="file" class="form-control">
                 </div>
                 @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
                 <div class="mb-3">

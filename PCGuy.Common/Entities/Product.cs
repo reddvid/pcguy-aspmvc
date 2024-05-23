@@ -18,12 +18,15 @@ public class Product
     [Required] public float Price { get; init; }
     public double Discount { get; init; }
     public bool IsOnSale => Discount > 0;
+   
+    [DisplayName("Brand Name")]
     public int BrandId { get; init; }
 
     [ForeignKey("BrandId")]
     [ValidateNever]
     public Brand? Brand { get; init; }
 
+    [DisplayName("Subcategory")]
     public int SubcategoryId { get; init; }
 
     [ForeignKey("SubcategoryId")]

@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using PCGuy.Common.Entities;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Mvc.Models;
@@ -15,9 +13,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Index()
     {
         var products = await unitOfWork.Product
-            .GetAllAsQuery()
-            .Include("Subcategory")
-            .Include("Subcategory.Category").ToListAsync();
+            .GetAllAsync("Subcategory, Subcategory.Category");
 
         ViewData["Title"] = "Products";
 
@@ -28,28 +24,21 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Index(int? id)
     {
         var products = await unitOfWork.Product
-            .GetAllAsQuery()
-            .Include("Subcategory")
-            .Include("Subcategory.Category")
-            .ToListAsync();
-
-        var subcategories = await unitOfWork.Subcategory
-            .GetAllAsQuery()
-            .ToListAsync();
-
+            .GetAllAsync("Subcategory, Subcategory.Category");
+        
         if (id is null or 0)
         {
             ViewData["Title"] = "All Products";
             return View(products);
         }
 
-        var subcategory = subcategories.Find(o => o.Id == id);
-        if (subcategory is null) return View(products);
+        var category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+        if (category is null) return View(products);
 
         var filteredProductsBySubcategory = products.Where(p => p.Subcategory?.Category?.Id == id)
             .ToList();
 
-        ViewData["Title"] = subcategory.Name;
+        ViewData["Title"] = category.Name;
         TempData["ProductSubcategoryId"] = id;
 
         return View(filteredProductsBySubcategory);
@@ -57,16 +46,16 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
 
     public async Task<IActionResult> Upsert(int? id)
     {
-        var brandList = unitOfWork.Brand
-            .GetAllAsQuery()
+        var brandList = (await unitOfWork.Brand
+            .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.Name
             });
 
-        var subcategoryList = unitOfWork.Subcategory
-            .GetAllAsQuery()
+        var subcategoryList = (await unitOfWork.Subcategory
+            .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -87,7 +76,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         }
 
         // Edit
-        productViewModel.Product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        productViewModel.Product = (await unitOfWork.Product.GetAsync(o => o.Id == id))!;
 
         return View(productViewModel);
     }
@@ -106,14 +95,14 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
                 if (!string.IsNullOrEmpty(viewModel.Product.FeaturedImage))
                 {
                     var oldImagePath = Path.Combine(wwwRootPath, viewModel.Product.FeaturedImage.TrimStart('\\'));
-                    
+
                     if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
                 }
 
                 await using var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create);
                 await file.CopyToAsync(fileStream);
 
-                viewModel.Product!.FeaturedImage = @"\images\product\" + fileName;
+                viewModel.Product.FeaturedImage = @"\images\product\" + fileName;
             }
 
             if (viewModel.Product.Id == 0)
@@ -124,22 +113,22 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
             {
                 unitOfWork.Product.Update(viewModel.Product);
             }
-            
+
             await unitOfWork.SaveAsync();
             TempData["success"] = "Product added successfully";
             return RedirectToAction("Index");
         }
 
-        var brandList = unitOfWork.Brand
-            .GetAllAsQuery()
+        var brandList = (await unitOfWork.Brand
+                .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
                 Text = x.Name
             });
 
-        var subcategoryList = unitOfWork.Subcategory
-            .GetAllAsQuery()
+        var subcategoryList = (await unitOfWork.Subcategory
+            .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -149,7 +138,6 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         viewModel.BrandListItems = brandList;
         viewModel.SubcategoryListItems = subcategoryList;
         return View(viewModel);
-
     }
 
     public async Task<IActionResult> Delete(int? id)
@@ -171,7 +159,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         unitOfWork.Product.Remove(product);
         await unitOfWork.SaveAsync();
 
-        int productsBySubcategory = GetReturnId(product.SubcategoryId);
+        var productsBySubcategory = await GetReturnIdAsync(product.SubcategoryId);
 
         TempData["success"] = "Product deleted successfully";
 
@@ -181,22 +169,17 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Details(int? id)
     {
         var products = await unitOfWork.Product
-            .GetAllAsQuery()
-            .Include("Brand")
-            .Include("Subcategory")
-            .ToListAsync();
+            .GetAllAsync("Brand,Subcategory");
 
-        var product = products.Find(x => x.Id == id);
+        var product = products.FirstOrDefault(x => x.Id == id);
         return View(product);
     }
 
     // ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc
-    private int GetReturnId(int productSubcategoryId)
+    private async Task<int> GetReturnIdAsync(int productSubcategoryId)
     {
-        var subcategory = unitOfWork.Subcategory
-            .GetAllAsQuery()
-            .Include("Category")
-            .FirstOrDefault(p => p.Id == productSubcategoryId);
+        var subcategory = await unitOfWork.Subcategory
+            .GetAsync(p => p.Id == productSubcategoryId, "Category");
 
         return subcategory?.CategoryId ?? 2;
     }
