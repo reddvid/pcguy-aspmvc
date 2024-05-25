@@ -19,7 +19,7 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
 
     public async Task<IActionResult> Details(int id)
     {
-        Product? product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        Product? product = await unitOfWork.Product.GetAsync(o => o.Id == id, "Subcategory, Subcategory.Category");
         return View(product!);
     }
 
