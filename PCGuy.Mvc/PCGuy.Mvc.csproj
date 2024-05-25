@@ -48,6 +48,7 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Views\Brand\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Subcategory\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
     </ItemGroup>
 
 </Project>

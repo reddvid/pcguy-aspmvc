@@ -13,6 +13,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
         var categories = new List<Category>
         {
             new() { Id = 1, Name = "Software" },
@@ -122,7 +124,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.Entity<Subcategory>().HasData(subcategories);
         modelBuilder.Entity<Brand>().HasData(brands);
         modelBuilder.Entity<Product>().HasData(products);
-
-        base.OnModelCreating(modelBuilder);
     }
 }
