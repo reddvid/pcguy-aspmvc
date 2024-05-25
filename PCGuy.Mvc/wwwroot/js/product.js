@@ -9,7 +9,7 @@ function loadDataTable() {
         "ajax": {url: '/admin/product/getall'},
         "columns": [
             {data: 'name'},
-            {data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '₱')},
+            {data: 'displayprice'}, // render: $.fn.dataTable.render.number(',', '.', 2, '₱')
             {data: 'subcategory.name'},
             {data: 'subcategory.category.name'},
             {
