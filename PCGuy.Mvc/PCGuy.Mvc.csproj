@@ -49,6 +49,9 @@
       <_ContentIncludedByDefault Remove="Views\Brand\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Subcategory\Index.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Pages\Account\Manage\_LoginPartial.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Pages\Account\Manage\_ViewImports.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Pages\Account\Manage\_ViewStart.cshtml" />
     </ItemGroup>
 
 </Project>
