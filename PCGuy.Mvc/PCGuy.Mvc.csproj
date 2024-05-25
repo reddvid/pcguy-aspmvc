@@ -25,6 +25,7 @@
     <ItemGroup>
       <ProjectReference Include="..\PCGuy.Common\PCGuy.Common.csproj" />
       <ProjectReference Include="..\PCGuy.DataAccess\PCGuy.DataAccess.csproj" />
+      <ProjectReference Include="..\PCGuy.Helpers\PCGuy.Helpers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
