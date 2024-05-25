@@ -25,7 +25,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     {
         var products = await unitOfWork.Product
             .GetAllAsync("Subcategory, Subcategory.Category");
-        
+
         if (id is null or 0)
         {
             ViewData["Title"] = "All Products";
@@ -47,7 +47,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Upsert(int? id)
     {
         var brandList = (await unitOfWork.Brand
-            .GetAllAsync())
+                .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -55,7 +55,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
             });
 
         var subcategoryList = (await unitOfWork.Subcategory
-            .GetAllAsync())
+                .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -128,7 +128,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
             });
 
         var subcategoryList = (await unitOfWork.Subcategory
-            .GetAllAsync())
+                .GetAllAsync())
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
@@ -138,32 +138,6 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         viewModel.BrandListItems = brandList;
         viewModel.SubcategoryListItems = subcategoryList;
         return View(viewModel);
-    }
-
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id is null or 0) return NotFound();
-
-        Product? product = await unitOfWork.Product.GetAsync(o => o.Id == id);
-        if (product is null) return NotFound();
-
-        return View(product);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public async Task<IActionResult> DeletePOST(int? id)
-    {
-        Product? product = await unitOfWork.Product.GetAsync(x => x.Id == id);
-        if (product is null) return NotFound();
-
-        unitOfWork.Product.Remove(product);
-        await unitOfWork.SaveAsync();
-
-        var productsBySubcategory = await GetReturnIdAsync(product.SubcategoryId);
-
-        TempData["success"] = "Product deleted successfully";
-
-        return RedirectToAction("Index", new { id = productsBySubcategory });
     }
 
     public async Task<IActionResult> Details(int? id)
@@ -183,4 +157,35 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
 
         return subcategory?.CategoryId ?? 2;
     }
+
+    #region API CALLS
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var products = await unitOfWork.Product.GetAllAsync("Subcategory.Category");
+        return Json(new { data = products });
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(int? id)
+    {
+        var product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        if (product is null) return Json(new { success = false, message = "Error while deleting product." });
+
+        if (!string.IsNullOrEmpty(product.FeaturedImage))
+        {
+            var productImagePath = Path.Combine(webHostEnvironment.WebRootPath,
+                product.FeaturedImage.TrimStart('\\'));
+
+            if (System.IO.File.Exists(productImagePath)) System.IO.File.Delete(productImagePath);
+        }
+
+        unitOfWork.Product.Remove(product);
+        await unitOfWork.SaveAsync();
+
+        return Json(new { success = true, message = "Product deleted." });
+    }
+
+    #endregion
 }

@@ -1,4 +1,4 @@
-@if (TempData["success"] is not null && string.IsNullOrWhiteSpace(TempData["success"]?.ToString()))
+@if (TempData["success"] is not null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -7,7 +7,7 @@
     </script>
 }
 
-@if (TempData["error"] is not null && string.IsNullOrWhiteSpace(TempData["error"]?.ToString()))
+@if (TempData["error"] is not null)
 {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

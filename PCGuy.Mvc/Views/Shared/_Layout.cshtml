@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     @* <link rel="stylesheet" href="~/PCGuy.Mvc.styles.css" asp-append-version="true"/> *@
+    <!-- DataTables -->
+    <link rel="stylesheet" href="//cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css"/>
 </head>
 <body>
 <header>
@@ -27,12 +29,14 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Find products" aria-label="Find products" aria-describedby="">
                     <div class="input-group-append">
-                        <a class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></a>
+                        <a class="btn btn-outline-secondary" type="button">
+                            <i class="bi bi-search"></i>
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="col-auto">
-                <partial name="_LoginPartial" />
+                <partial name="_LoginPartial"/>
             </div>
         </div>
         <div class="container nav-row2">
@@ -135,6 +139,8 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script src="https://cdn.tiny.cloud/1/vd3q2cevzintb2lcus6wz2enw7rw6xdjq7hzrzf0hb221fix/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="//cdn.datatables.net/2.0.7/js/dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

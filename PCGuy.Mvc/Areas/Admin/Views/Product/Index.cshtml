@@ -12,28 +12,19 @@
 </div>
 @* @if (ViewData["Title"]!.Equals("All Products")) *@
 <div class="row">
-    <table class="table table-bordered table-striped">
+    <table id="dataTable" class="table table-bordered table-striped">
         <thead>
         <tr>
             <th>Name</th>
+            <th>Price</th>
+            <th>Subcategory</th>
+            <th>Category</th>
             <th>Actions</th>
         </tr>
         </thead>
-        <tbody>
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td >
-                    @product.Name
-                </td>
-                <td>
-                    <div class="w-75 btn-group" role="group">
-                        <a class="link-info mx-2" asp-action="Upsert" asp-route-id="@product.Id" asp-controller="Product">Edit</a>
-                        <a class="link-danger ms-2">Delete</a>
-                    </div>
-                </td>
-            </tr>
-        }
-        </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script src="~/js/product.js"></script>
+}
