@@ -17,6 +17,12 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
         return View(products);
     }
 
+    public async Task<IActionResult> Details(int id)
+    {
+        Product? product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        return View(product!);
+    }
+
     public IActionResult Privacy()
     {
         return View();
