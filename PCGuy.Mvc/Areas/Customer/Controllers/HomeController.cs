@@ -1,22 +1,20 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PCGuy.Common.Entities;
+using PCGuy.DataAccess.Repository;
+using PCGuy.Helpers;
 using PCGuy.Mvc.Models;
 
 namespace PCGuy.Mvc.Areas.Customer.Controllers;
 
 [Area("Customer")]
-public class HomeController : Controller
+public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public async Task<IActionResult> Index()
     {
-        _logger = logger;
-    }
-
-    public IActionResult Index()
-    {
-        return View();
+        IEnumerable<Product> products = await unitOfWork.Product.GetAllAsync();
+        products = products.Shuffle().Take(10);
+        return View(products);
     }
 
     public IActionResult Privacy()
