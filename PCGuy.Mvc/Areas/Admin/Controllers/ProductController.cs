@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Mvc.Models;
 

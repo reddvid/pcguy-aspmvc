@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
 
 namespace PCGuy.Mvc.Areas.Admin.Controllers;

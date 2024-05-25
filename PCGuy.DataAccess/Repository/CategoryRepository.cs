@@ -1,4 +1,4 @@
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Data;
 
 namespace PCGuy.DataAccess.Repository;

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace PCGuy.Common.Entities;
+namespace PCGuy.Entities.Entities;
 
 public class Product
 {

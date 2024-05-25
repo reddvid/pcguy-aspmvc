@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 
 namespace PCGuy.DataAccess.Repository;
 

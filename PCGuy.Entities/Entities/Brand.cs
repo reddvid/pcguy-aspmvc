@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PCGuy.Common.Enums;
 
-namespace PCGuy.Common.Entities;
+namespace PCGuy.Entities.Entities;
 
 public class Brand
 {

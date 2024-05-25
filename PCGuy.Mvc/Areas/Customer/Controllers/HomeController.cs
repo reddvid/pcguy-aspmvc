@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Helpers;
 using PCGuy.Mvc.Models;

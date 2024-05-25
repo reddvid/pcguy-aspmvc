@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PCGuy.Common.Entities;
+using PCGuy.Entities.Entities;
 
 namespace PCGuy.DataAccess.Data;
 

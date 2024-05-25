@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PCGuy.Common\PCGuy.Common.csproj" />
+      <ProjectReference Include="..\PCGuy.Entities\PCGuy.Entities.csproj" />
     </ItemGroup>
 
 </Project>
