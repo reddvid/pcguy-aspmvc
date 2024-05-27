@@ -51,77 +51,87 @@
                             Home
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-id="0">
-                            Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index">
-                            Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Subcategory" asp-action="Index">
-                            Subcategories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">
-                            Brands
-                        </a>
-                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PC Parts</a>
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-id="2">View all</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">CPU / Processors</a>
-                            <a class="dropdown-item" href="#">Motherboards</a>
-                            <a class="dropdown-item" href="#">CPU Coolers</a>
-                            <a class="dropdown-item" href="#">Memory</a>
-                            <a class="dropdown-item" href="#">GPU / Video Cards</a>
-                            <a class="dropdown-item" href="#">PSU / Power Supplies</a>
-                            <a class="dropdown-item" href="#">Storage</a>
-                            <a class="dropdown-item" href="#">Case Fans</a>
-                            <a class="dropdown-item" href="#">Towers / PC Cases</a>
+                            <a class="dropdown-item" asp-controller="Product" asp-action="Index">Products</a>
+                            <a class="dropdown-item" asp-controller="Subcategory" asp-action="Index">Subcategories</a>
+                            <a class="dropdown-item" asp-controller="Brand" asp-action="Index">Brands</a>
+                            <a class="dropdown-item" asp-controller="Category" asp-action="Index">Categories</a>
+
                         </div>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                           aria-haspopup="true" aria-expanded="false">
-                            Peripherals
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-id="3">View all</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Monitors</a>
-                            <a class="dropdown-item" href="#">Mice</a>
-                            <a class="dropdown-item" href="#">Keyboards</a>
-                            <a class="dropdown-item" href="#">Speakers</a>
-                            <a class="dropdown-item" href="#">Headsets</a>
-                            <a class="dropdown-item" href="#">Microphones</a>
-                            <a class="dropdown-item" href="#">Printers and Scanners</a>
-                            <a class="dropdown-item" href="#">Macro Keys</a>
-                            <a class="dropdown-item" href="#">Controllers</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"
-                           aria-haspopup="true" aria-expanded="false">
-                            Accessories
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Show all</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Chargers</a>
-                            <a class="dropdown-item" href="#">Cables</a>
-                            <a class="dropdown-item" href="#">Mouse Pads</a>
-                            <a class="dropdown-item" href="#">Wrist Pads / Wrist Rests</a>
-                            <a class="dropdown-item" href="#">Thermal Paste</a>
-                            <a class="dropdown-item" href="#">USB Hubs</a>
-                        </div>
-                    </li>
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-id="0"> *@
+                    @*         Products *@
+                    @*     </a> *@
+                    @* </li> *@
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Category" asp-action="Index"> *@
+                    @*         Categories *@
+                    @*     </a> *@
+                    @* </li> *@
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Subcategory" asp-action="Index"> *@
+                    @*         Subcategories *@
+                    @*     </a> *@
+                    @* </li> *@
+                    @* <li class="nav-item"> *@
+                    @*     <a class="nav-link" asp-area="Admin" asp-controller="Brand" asp-action="Index"> *@
+                    @*         Brands *@
+                    @*     </a> *@
+                    @* </li> *@
+                    @* <li class="nav-item dropdown"> *@
+                    @*     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PC Parts</a> *@
+                    @*     <div class="dropdown-menu"> *@
+                    @*         <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-id="2">View all</a> *@
+                    @*         <div class="dropdown-divider"></div> *@
+                    @*         <a class="dropdown-item" href="#">CPU / Processors</a> *@
+                    @*         <a class="dropdown-item" href="#">Motherboards</a> *@
+                    @*         <a class="dropdown-item" href="#">CPU Coolers</a> *@
+                    @*         <a class="dropdown-item" href="#">Memory</a> *@
+                    @*         <a class="dropdown-item" href="#">GPU / Video Cards</a> *@
+                    @*         <a class="dropdown-item" href="#">PSU / Power Supplies</a> *@
+                    @*         <a class="dropdown-item" href="#">Storage</a> *@
+                    @*         <a class="dropdown-item" href="#">Case Fans</a> *@
+                    @*         <a class="dropdown-item" href="#">Towers / PC Cases</a> *@
+                    @*     </div> *@
+                    @* </li> *@
+                    @* <li class="nav-item dropdown"> *@
+                    @*     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" *@
+                    @*        aria-haspopup="true" aria-expanded="false"> *@
+                    @*         Peripherals *@
+                    @*     </a> *@
+                    @*     <div class="dropdown-menu"> *@
+                    @*         <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-id="3">View all</a> *@
+                    @*         <div class="dropdown-divider"></div> *@
+                    @*         <a class="dropdown-item" href="#">Monitors</a> *@
+                    @*         <a class="dropdown-item" href="#">Mice</a> *@
+                    @*         <a class="dropdown-item" href="#">Keyboards</a> *@
+                    @*         <a class="dropdown-item" href="#">Speakers</a> *@
+                    @*         <a class="dropdown-item" href="#">Headsets</a> *@
+                    @*         <a class="dropdown-item" href="#">Microphones</a> *@
+                    @*         <a class="dropdown-item" href="#">Printers and Scanners</a> *@
+                    @*         <a class="dropdown-item" href="#">Macro Keys</a> *@
+                    @*         <a class="dropdown-item" href="#">Controllers</a> *@
+                    @*     </div> *@
+                    @* </li> *@
+                    @* <li class="nav-item dropdown"> *@
+                    @*     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" *@
+                    @*        aria-haspopup="true" aria-expanded="false"> *@
+                    @*         Accessories *@
+                    @*     </a> *@
+                    @*     <div class="dropdown-menu"> *@
+                    @*         <a class="dropdown-item" href="#">Show all</a> *@
+                    @*         <div class="dropdown-divider"></div> *@
+                    @*         <a class="dropdown-item" href="#">Chargers</a> *@
+                    @*         <a class="dropdown-item" href="#">Cables</a> *@
+                    @*         <a class="dropdown-item" href="#">Mouse Pads</a> *@
+                    @*         <a class="dropdown-item" href="#">Wrist Pads / Wrist Rests</a> *@
+                    @*         <a class="dropdown-item" href="#">Thermal Paste</a> *@
+                    @*         <a class="dropdown-item" href="#">USB Hubs</a> *@
+                    @*     </div> *@
+                    @* </li> *@
                 </ul>
             </div>
         </div>

@@ -9,7 +9,7 @@ namespace PCGuy.Mvc.Areas.Admin.Controllers;
 [Area("Admin")]
 public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment) : Controller
 {
-    [Route("products")]
+    [Route("products/")]
     public async Task<IActionResult> Index()
     {
         var products = await unitOfWork.Product
