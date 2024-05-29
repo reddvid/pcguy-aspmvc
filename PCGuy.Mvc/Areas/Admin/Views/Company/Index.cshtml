@@ -1,5 +1,3 @@
-@model IEnumerable<Company>
-
 @{
     ViewData["Title"] = "Company List";
 }
@@ -9,7 +7,7 @@
         <h1>@ViewData["Title"]</h1>
     </div>
     <div class="col-6 text-end ">
-        <a asp-controller="Category" asp-action="Upsert" class="btn btn-primary">
+        <a asp-controller="Company" asp-action="Upsert" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i><span class="ms-2">Add Company</span>
         </a>
     </div>
@@ -44,9 +42,11 @@
                 "ajax": {url: '/admin/company/getall'},
                 "columns": [
                     {data: 'name'},
-                    {data: 'displayPrice'}, // render: $.fn.dataTable.render.number(',', '.', 2, '₱')
-                    {data: 'subcategory.name'},
-                    {data: 'subcategory.category.name'},
+                    {data: 'streetAddress'},
+                    {data: 'city'},
+                    {data: 'postalCode'},
+                    {data: 'state'},
+                    {data: 'phoneNumber'},
                     {
                         data: 'id',
                         render: function (data) {

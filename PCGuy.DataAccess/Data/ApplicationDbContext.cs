@@ -5,21 +5,22 @@ using PCGuy.Entities.Entities;
 
 namespace PCGuy.DataAccess.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<IdentityUser>(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<IdentityUser>(options)
 {
     public DbSet<Category> Categories { get; init; }
     public DbSet<Subcategory> Subcategories { get; init; }
     public DbSet<Brand> Brands { get; init; }
     public DbSet<Product> Products { get; init; }
-    
+
     public DbSet<ApplicationUser> ApplicationUsers { get; init; }
-    
+
     public DbSet<Company> Companies { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         var categories = new List<Category>
         {
             new() { Id = 1, Name = "Software" },
@@ -80,13 +81,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new() { Id = 22, Name = "Corsair" },
             new() { Id = 23, Name = "SilverStone" },
         };
-        
+
         var products = new List<Product>
         {
             new()
             {
                 Id = 1,
-                Name = "AMD Ryzen 5 5700X",  
+                Name = "AMD Ryzen 5 5700X",
                 Price = 11_000,
                 BrandId = brands[0].Id,
                 SubcategoryId = subcategories[15].Id
@@ -94,7 +95,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new()
             {
                 Id = 2,
-                Name = "MSI B550 PRO-VDH WIFI", 
+                Name = "MSI B550 PRO-VDH WIFI",
                 Price = 2_500,
                 BrandId = brands[15].Id,
                 SubcategoryId = subcategories[16].Id
@@ -102,7 +103,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new()
             {
                 Id = 3,
-                Name = "SilverStone PF240-ARGB", 
+                Name = "SilverStone PF240-ARGB",
                 Price = 1_500,
                 BrandId = brands[21].Id,
                 SubcategoryId = subcategories[17].Id
@@ -110,7 +111,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new()
             {
                 Id = 4,
-                Name = "HyperX Fury 16GB", 
+                Name = "HyperX Fury 16GB",
                 Price = 2_500,
                 BrandId = brands[16].Id,
                 SubcategoryId = subcategories[10].Id
@@ -118,16 +119,36 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             new()
             {
                 Id = 5,
-                Name = "Samsung 970 EVO Plus", 
+                Name = "Samsung 970 EVO Plus",
                 Price = 4_500,
                 BrandId = brands[6].Id,
                 SubcategoryId = subcategories[14].Id
             },
         };
-        
+
+        var companies = new List<Company>
+        {
+            new()
+            {
+                Id = 1, Name = "NuTech", StreetAddress = "123 Tech St", City = "Tokyo", PostalCode = "57000",
+                State = "NY", PhoneNumber = "000012345"
+            },
+            new()
+            {
+                Id = 2, Name = "InfoSystems Grid", StreetAddress = "45 Grid St", City = "Makati", PostalCode = "5100",
+                State = "PH", PhoneNumber = "990012345"
+            },
+            new()
+            {
+                Id = 3, Name = "Krytech Solutions", StreetAddress = "10 Solutions St", City = "Baguio", PostalCode = "4100",
+                State = "PH", PhoneNumber = "630012345"
+            },
+        };
+
         modelBuilder.Entity<Category>().HasData(categories);
         modelBuilder.Entity<Subcategory>().HasData(subcategories);
         modelBuilder.Entity<Brand>().HasData(brands);
         modelBuilder.Entity<Product>().HasData(products);
+        modelBuilder.Entity<Company>().HasData(companies);
     }
 }

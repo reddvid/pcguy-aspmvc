@@ -56,14 +56,14 @@ public class CompanyController(IUnitOfWork unitOfWork) : Controller
 
     }
 
-    public async Task<IActionResult> Details(int? id)
-    {
-        var products = await unitOfWork.Company
-            .GetAllAsync("Brand,Subcategory");
-
-        var product = products.FirstOrDefault(x => x.Id == id);
-        return View(product);
-    }
+    // public async Task<IActionResult> Details(int? id)
+    // {
+    //     var products = await unitOfWork.Company
+    //         .GetAllAsync("Brand,Subcategory");
+    //
+    //     var product = products.FirstOrDefault(x => x.Id == id);
+    //     return View(product);
+    // }
 
     #region API CALLS
 
@@ -78,7 +78,7 @@ public class CompanyController(IUnitOfWork unitOfWork) : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         var company = await unitOfWork.Company.GetAsync(o => o.Id == id);
-        if (company is null) return Json(new { success = false, message = "Error while deleting product." });
+        if (company is null) return Json(new { success = false, message = "Error while deleting company." });
         
         unitOfWork.Company.Remove(company);
         await unitOfWork.SaveAsync();
