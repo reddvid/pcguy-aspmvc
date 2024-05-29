@@ -1,4 +1,4 @@
-namespace PCGuy.Mvc.Models;
+namespace PCGuy.Entities.ViewModels;
 
 public class ErrorViewModel
 {

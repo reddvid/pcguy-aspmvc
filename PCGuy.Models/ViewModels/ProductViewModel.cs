@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PCGuy.Entities.Entities;
 
-namespace PCGuy.Mvc.Models;
+namespace PCGuy.Entities.ViewModels;
 
 public class ProductViewModel
 {

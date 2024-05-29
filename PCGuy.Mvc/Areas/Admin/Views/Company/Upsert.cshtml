@@ -1,0 +1,68 @@
+@model Company
+
+@{
+    ViewBag.Title = "Add New Category";
+}
+
+<div class="row pb-2">
+    <h4 class="text-uppercase">@(Model.Id != 0 ? "Edit" : "Add New") Category</h4>
+</div>
+<div class="row mb-3">
+    <div class="col-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Category List</span>
+        </a>
+    </div>
+</div>
+<form method="post" class="row" enctype="multipart/form-data">
+    <div class="border p-3 mt-4">
+        <input asp-for="Id" hidden/>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="StreetAddress"></label>
+            <input asp-for="StreetAddress" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="State"></label>
+            <input asp-for="State" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" class="form-control" required>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                @if (Model.Id != 0)
+                {
+                    <button type="submit" class="btn btn-primary w-75">Edit</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary w-75">Create</button>
+                }
+            </div>
+            <div class="col-4">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i><span class="ms-2">Back to Category List</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}

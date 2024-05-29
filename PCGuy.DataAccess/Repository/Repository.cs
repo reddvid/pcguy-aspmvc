@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using PCGuy.DataAccess.Contracts;
 using PCGuy.DataAccess.Data;
 
 namespace PCGuy.DataAccess.Repository;

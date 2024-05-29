@@ -1,6 +1,7 @@
+using PCGuy.DataAccess.Repository;
 using PCGuy.Entities.Entities;
 
-namespace PCGuy.DataAccess.Repository;
+namespace PCGuy.DataAccess.Contracts;
 
 public interface IProductRepository : IRepository<Product>
 {

@@ -1,9 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using PCGuy.DataAccess.Contracts;
 using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
+using PCGuy.Entities.ViewModels;
 using PCGuy.Helpers;
-using PCGuy.Mvc.Models;
 
 namespace PCGuy.Mvc.Areas.Customer.Controllers;
 

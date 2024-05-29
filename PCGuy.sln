@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCGuy.Entities", "PCGuy.Entities\PCGuy.Entities.csproj", "{9CF998AC-10A1-43B9-9008-CA1B5A0EC71B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCGuy.Models", "PCGuy.Models\PCGuy.Models.csproj", "{9CF998AC-10A1-43B9-9008-CA1B5A0EC71B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCGuy.Mvc", "PCGuy.Mvc\PCGuy.Mvc.csproj", "{5CB35EE3-657C-4EA2-BF7A-3F5267D9D14A}"
 EndProject

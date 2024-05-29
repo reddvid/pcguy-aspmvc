@@ -11,7 +11,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Subcategory> Subcategories { get; init; }
     public DbSet<Brand> Brands { get; init; }
     public DbSet<Product> Products { get; init; }
-    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+    
+    public DbSet<ApplicationUser> ApplicationUsers { get; init; }
+    
+    public DbSet<Company> Companies { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

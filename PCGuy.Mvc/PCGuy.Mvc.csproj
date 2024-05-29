@@ -24,13 +24,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PCGuy.Entities\PCGuy.Entities.csproj" />
+      <ProjectReference Include="..\PCGuy.Models\PCGuy.Models.csproj" />
       <ProjectReference Include="..\PCGuy.DataAccess\PCGuy.DataAccess.csproj" />
       <ProjectReference Include="..\PCGuy.Helpers\PCGuy.Helpers.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <AdditionalFiles Include="Areas\Admin\Views\Brand\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Company\Index.cshtml" />
+      <AdditionalFiles Include="Areas\Admin\Views\Company\Upsert.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Product\_ProductItem.cshtml" />
@@ -42,6 +44,7 @@
 
     <ItemGroup>
       <Folder Include="Controllers\" />
+      <Folder Include="Models\" />
       <Folder Include="wwwroot\images\product\" />
     </ItemGroup>
 

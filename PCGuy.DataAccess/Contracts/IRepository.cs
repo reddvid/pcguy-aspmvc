@@ -1,7 +1,6 @@
 using System.Linq.Expressions;
-using System.Security.Cryptography.X509Certificates;
 
-namespace PCGuy.DataAccess.Repository;
+namespace PCGuy.DataAccess.Contracts;
 
 public interface IRepository<T> where T : class
 {

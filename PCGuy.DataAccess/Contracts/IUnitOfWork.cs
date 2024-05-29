@@ -1,6 +1,6 @@
-using PCGuy.DataAccess.Data;
+using PCGuy.DataAccess.Repository;
 
-namespace PCGuy.DataAccess.Repository;
+namespace PCGuy.DataAccess.Contracts;
 
 public interface IUnitOfWork
 {
@@ -8,6 +8,7 @@ public interface IUnitOfWork
     IProductRepository Product { get; }
     ISubcategoryRepository Subcategory { get; }    
     IBrandRepository Brand { get; }
+    ICompanyRepository Company { get; }
 
     Task SaveAsync();
 }

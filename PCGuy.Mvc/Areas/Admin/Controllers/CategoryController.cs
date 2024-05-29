@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PCGuy.DataAccess.Contracts;
 using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
+using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = Roles.ADMIN)]
 public class CategoryController(IUnitOfWork unitOfWork) : Controller
 {
     // GET
@@ -29,7 +33,7 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
     }
 
     [HttpPost, ActionName("Upsert")]
-    public async Task<IActionResult> CreatePOST(Category category)
+    public async Task<IActionResult> UpsertPOST(Category category)
     {
         if (!ModelState.IsValid) return View();
 
@@ -39,24 +43,26 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
     }
 
 
+    #region API CALLS
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var categories = await unitOfWork.Category.GetAllAsync();
+        return Json(new { data = categories });
+    }
+
+    [HttpDelete]
     public async Task<IActionResult> Delete(int? id)
     {
-        if (id is null or 0) return NotFound();
-
-        Category? category = await unitOfWork.Category.GetAsync(o => o.Id == id);
-        if (category is null) return NotFound();
-        
-        return View(category);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public async Task<IActionResult> DeletePOST(int? id)
-    {
-        Category? category = await unitOfWork.Category.GetAsync(o => o.Id == id);
-        if (category is null) return NotFound();
+        var category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+        if (category is null) return Json(new { success = false, message = "Error while deleting category." });
 
         unitOfWork.Category.Remove(category);
-        
-        return RedirectToAction("Index");
+        await unitOfWork.SaveAsync();
+
+        return Json(new { success = true, message = "Category deleted." });
     }
+
+    #endregion
 }

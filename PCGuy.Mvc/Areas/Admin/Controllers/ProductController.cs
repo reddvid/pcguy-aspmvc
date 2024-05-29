@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PCGuy.DataAccess.Contracts;
 using PCGuy.Entities.Entities;
 using PCGuy.DataAccess.Repository;
-using PCGuy.Mvc.Models;
+using PCGuy.Entities.ViewModels;
+using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Authorize(Roles = Roles.ADMIN)]
 public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment) : Controller
 {
     [Route("products/")]

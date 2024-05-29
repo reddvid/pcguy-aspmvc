@@ -6,18 +6,15 @@ let dataTable;
 
 function loadDataTable() {
     dataTable = $('#dataTable').DataTable({
-        "ajax": {url: '/admin/product/getall'},
+        "ajax": {url: '/admin/category/getall'},
         "columns": [
             {data: 'name'},
-            {data: 'displayPrice'}, // render: $.fn.dataTable.render.number(',', '.', 2, '₱')
-            {data: 'subcategory.name'},
-            {data: 'subcategory.category.name'},
             {
                 data: 'id',
                 render: function (data) {
                     return ` <div class="w-75 btn-group" role="group">
-                        <a class="link-info mx-2" href="/admin/product/upsert?id=${data}">Edit</a>
-                        <a class="link-danger ms-2" style="cursor:pointer;" onclick="Delete('/admin/product/delete/${data}')">Delete</a>
+                        <a class="link-info mx-2" href="/admin/category/upsert?id=${data}">Edit</a>
+                        <a class="link-danger ms-2" style="cursor:pointer;" onclick="Delete('/admin/category/delete/${data}')">Delete</a>
                     </div>`
                 }
             }

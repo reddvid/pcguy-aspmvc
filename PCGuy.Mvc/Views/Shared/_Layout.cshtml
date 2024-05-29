@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using PCGuy.Helpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -51,16 +52,19 @@
                             Home
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" asp-controller="Product" asp-action="Index">Products</a>
-                            <a class="dropdown-item" asp-controller="Subcategory" asp-action="Index">Subcategories</a>
-                            <a class="dropdown-item" asp-controller="Brand" asp-action="Index">Brands</a>
-                            <a class="dropdown-item" asp-controller="Category" asp-action="Index">Categories</a>
-
-                        </div>
-                    </li>
+                    @if (User.IsInRole(Roles.ADMIN))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Products</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Subcategory" asp-action="Index">Subcategories</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Brand" asp-action="Index">Brands</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Categories</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Company" asp-action="Index">Companies</a>
+                            </div>
+                        </li>
+                    }
                     @* <li class="nav-item"> *@
                     @*     <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index" asp-route-id="0"> *@
                     @*         Products *@
