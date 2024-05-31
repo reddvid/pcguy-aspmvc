@@ -19,16 +19,16 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
         return View(categories);
     }
 
-    public async Task<IActionResult> Upsert(int? id)
+    public async Task<IActionResult> Upsert(int? productId)
     {
         var category = new Category();
         
-        if (id is null or 0)
+        if (productId is null or 0)
         {
             return View(category);
         }
         
-        category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+        category = await unitOfWork.Category.GetAsync(o => o.Id == productId);
         return View(category);
     }
 
@@ -39,7 +39,7 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
 
         await unitOfWork.Category.AddAsync(category);
         await unitOfWork.SaveAsync();
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
     }
 
 
@@ -53,9 +53,9 @@ public class CategoryController(IUnitOfWork unitOfWork) : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(int? productId)
     {
-        var category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+        var category = await unitOfWork.Category.GetAsync(o => o.Id == productId);
         if (category is null) return Json(new { success = false, message = "Error while deleting category." });
 
         unitOfWork.Category.Remove(category);

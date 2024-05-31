@@ -80,7 +80,7 @@ app.UseAuthorization();
 //     defaults: new { controller = "Product", action="Index", id = 0 });
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{productId?}");
 app.MapRazorPages();
 
 app.Run();

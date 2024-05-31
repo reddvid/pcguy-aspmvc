@@ -22,16 +22,16 @@ public class CompanyController(IUnitOfWork unitOfWork) : Controller
         return View(companies);
     }
 
-    public async Task<IActionResult> Upsert(int? id)
+    public async Task<IActionResult> Upsert(int? productId)
     {
-        if (id is null or 0)
+        if (productId is null or 0)
         {
             // Create
             return View(new Company());
         }
 
         // Edit
-        Company company = (await unitOfWork.Company.GetAsync(o => o.Id == id))!;
+        Company company = (await unitOfWork.Company.GetAsync(o => o.Id == productId))!;
 
         return View(company);
     }
@@ -52,7 +52,7 @@ public class CompanyController(IUnitOfWork unitOfWork) : Controller
 
         await unitOfWork.SaveAsync();
         TempData["success"] = "Company added successfully";
-        return RedirectToAction("Index");
+        return RedirectToAction(nameof(Index));
 
     }
 
@@ -75,9 +75,9 @@ public class CompanyController(IUnitOfWork unitOfWork) : Controller
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(int? productId)
     {
-        var company = await unitOfWork.Company.GetAsync(o => o.Id == id);
+        var company = await unitOfWork.Company.GetAsync(o => o.Id == productId);
         if (company is null) return Json(new { success = false, message = "Error while deleting company." });
         
         unitOfWork.Company.Remove(company);

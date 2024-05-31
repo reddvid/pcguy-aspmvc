@@ -20,16 +20,17 @@ public class Repository<T>(ApplicationDbContext db) : IRepository<T>
         return await query.ToListAsync();
     }
 
-    public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null)
+    public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, string? includeProperties = null,
+        bool isTracked = false)
     {
-        IQueryable<T> query = _dbSet;
+        IQueryable<T> query = isTracked ? _dbSet : _dbSet.AsNoTracking();
         query = query.Where(filter);
 
         if (string.IsNullOrEmpty(includeProperties)) return await query.FirstOrDefaultAsync();
 
         query = includeProperties.Split(_separator, StringSplitOptions.RemoveEmptyEntries)
             .Aggregate(query, (current, includeProperty) => current.Include(includeProperty.Trim()));
-
+        
         return await query.FirstOrDefaultAsync();
     }
 

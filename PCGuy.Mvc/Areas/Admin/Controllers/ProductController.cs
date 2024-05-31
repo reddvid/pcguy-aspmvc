@@ -48,7 +48,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         return View(filteredProductsBySubcategory);
     }
 
-    public async Task<IActionResult> Upsert(int? id)
+    public async Task<IActionResult> Upsert(int? productId)
     {
         var brandList = (await unitOfWork.Brand
                 .GetAllAsync())
@@ -73,14 +73,14 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
             SubcategoryListItems = subcategoryList,
         };
 
-        if (id is null or 0)
+        if (productId is null or 0)
         {
             // Create
             return View(productViewModel);
         }
 
         // Edit
-        productViewModel.Product = (await unitOfWork.Product.GetAsync(o => o.Id == id))!;
+        productViewModel.Product = (await unitOfWork.Product.GetAsync(o => o.Id == productId))!;
 
         return View(productViewModel);
     }
@@ -120,7 +120,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
 
             await unitOfWork.SaveAsync();
             TempData["success"] = "Product added successfully";
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         var brandList = (await unitOfWork.Brand
@@ -144,12 +144,12 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         return View(viewModel);
     }
 
-    public async Task<IActionResult> Details(int? id)
+    public async Task<IActionResult> Details(int? productId)
     {
         var products = await unitOfWork.Product
             .GetAllAsync("Brand,Subcategory");
 
-        var product = products.FirstOrDefault(x => x.Id == id);
+        var product = products.FirstOrDefault(x => x.Id == productId);
         return View(product);
     }
 
@@ -172,9 +172,9 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Delete(int? id)
+    public async Task<IActionResult> Delete(int? productId)
     {
-        var product = await unitOfWork.Product.GetAsync(o => o.Id == id);
+        var product = await unitOfWork.Product.GetAsync(o => o.Id == productId);
         if (product is null) return Json(new { success = false, message = "Error while deleting product." });
 
         if (!string.IsNullOrEmpty(product.FeaturedImage))

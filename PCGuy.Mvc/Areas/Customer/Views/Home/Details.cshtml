@@ -1,25 +1,43 @@
 @using PCGuy.Helpers
-@model PCGuy.Entities.Entities.Product
+@model ShoppingCart
 
 @{
-    ViewData["Title"] = Model.Name;
+    ViewData["Title"] = Model.Product.Name;
 }
 
 <form method="post">
+    <input hidden asp-for="ProductId"/>
     <div class="card shadow border-0 mt-4">
         <div class="card-header bg-secondary bg-gradient text-light py-4">
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
-                    <img src="@Model.FeaturedImage" width="100%" alt="Product image for @Model.Name?.ToImageAltText()"/>
+                    <img src="@Model.Product.FeaturedImage" width="100%" alt="Product image for @Model.Product.Name!.ToImageAltText()"/>
                 </div>
                 <div class="col-lg-6 col-sm-12 mt-sm-2">
                     <div class="badge bg-info">
-                        @Model.Subcategory!.Name
+                        @Model.Product.Subcategory!.Name
                     </div>
-                    <h4 class="text-dark mt-2">@Model.Name</h4>
-                    <p class="text-primary-emphasis">@Model.DisplayPrice</p>
-                    <p class="text-primary">@Model.Brand?.Name</p>
-                    <a href="#" class="btn btn-primary">Add to cart</a>
+                    <h4 class="text-dark mt-2">@Model.Product.Name</h4>
+                    <p class="text-primary-emphasis">@Model.Product.DisplayPrice</p>
+                    <p class="text-primary">@Model.Product.Brand?.Name</p>
+                    <div class="row pl-2 my-3">
+                        <div class="col-md-4">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-primary text-white border-0 fw-semibold" id="inputGroup-sizing-default">
+                                    Count
+                                </span>
+                                <input asp-for="Count" type="number" value="1" class="form-control text-end"
+                                       aria-label="Sizing input" aria-describedby="inputGroup-sizing-default"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6 pb-1">
+                            <button type="submit" class="btn btn-primary bg-gradient w-100 py-2 text-uppercase fw-semibold">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,11 +46,11 @@
                 <div class="row mt-2">
                     <div class="row">
                         <h4>Description</h4>
-                        <p class="text-secondary lh-sm">@Html.Raw(Model.Description)</p>
+                        <p class="text-secondary lh-sm">@Html.Raw(Model.Product.Description)</p>
                     </div>
                     <div class="row">
                         <h4>Specifications</h4>
-                        <p class="text-secondary lh-sm">@Html.Raw(Model.Specifications)</p>
+                        <p class="text-secondary lh-sm">@Html.Raw(Model.Product.Specifications)</p>
                     </div>
                 </div>
             </div>
