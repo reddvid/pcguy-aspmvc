@@ -11,6 +11,8 @@ public class UnitOfWork : IUnitOfWork
     public ISubcategoryRepository Subcategory { get; }
     public IBrandRepository Brand { get; }
     public ICompanyRepository Company { get; }
+    public IShoppingCartRepository ShoppingCart { get; }
+    public IApplicationUserRepository ApplicationUser { get; }
 
     public UnitOfWork(ApplicationDbContext db)
     {
@@ -20,6 +22,8 @@ public class UnitOfWork : IUnitOfWork
         Subcategory = new SubcategoryRepository(_db);
         Brand = new BrandRepository(_db);
         Company = new CompanyRepository(_db);
+        ShoppingCart = new ShoppingCartRepository(_db);
+        ApplicationUser = new ApplicationUserRepository(_db);
     }
 
     public async Task SaveAsync()

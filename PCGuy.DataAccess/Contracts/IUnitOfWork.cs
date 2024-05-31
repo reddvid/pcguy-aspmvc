@@ -9,6 +9,8 @@ public interface IUnitOfWork
     ISubcategoryRepository Subcategory { get; }    
     IBrandRepository Brand { get; }
     ICompanyRepository Company { get; }
+    IShoppingCartRepository ShoppingCart { get; }
+    IApplicationUserRepository ApplicationUser { get; }
 
     Task SaveAsync();
 }

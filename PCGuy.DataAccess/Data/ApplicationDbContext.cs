@@ -14,7 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Product> Products { get; init; }
 
     public DbSet<ApplicationUser> ApplicationUsers { get; init; }
-
+    public DbSet<ShoppingCart> ShoppingCarts { get; init; }
     public DbSet<Company> Companies { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -140,7 +140,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             },
             new()
             {
-                Id = 3, Name = "Krytech Solutions", StreetAddress = "10 Solutions St", City = "Baguio", PostalCode = "4100",
+                Id = 3, Name = "Krytech Solutions", StreetAddress = "10 Solutions St", City = "Baguio",
+                PostalCode = "4100",
                 State = "PH", PhoneNumber = "630012345"
             },
         };
