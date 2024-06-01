@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PCGuy.DataAccess.Contracts;
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 using PCGuy.DataAccess.Repository;
-using PCGuy.Entities.ViewModels;
+using PCGuy.Models.ViewModels;
 using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Admin.Controllers;
@@ -17,7 +17,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Index()
     {
         var products = await unitOfWork.Product
-            .GetAllAsync("Subcategory, Subcategory.Category");
+            .GetAllAsync(null,"Subcategory, Subcategory.Category");
 
         ViewData["Title"] = "Products";
 
@@ -28,7 +28,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Index(int? id)
     {
         var products = await unitOfWork.Product
-            .GetAllAsync("Subcategory, Subcategory.Category");
+            .GetAllAsync(null, "Subcategory, Subcategory.Category");
 
         if (id is null or 0)
         {
@@ -147,7 +147,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Details(int? productId)
     {
         var products = await unitOfWork.Product
-            .GetAllAsync("Brand,Subcategory");
+            .GetAllAsync(null, "Brand,Subcategory");
 
         var product = products.FirstOrDefault(x => x.Id == productId);
         return View(product);
@@ -167,7 +167,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var products = await unitOfWork.Product.GetAllAsync("Subcategory.Category");
+        var products = await unitOfWork.Product.GetAllAsync(null,"Subcategory.Category");
         return Json(new { data = products });
     }
 

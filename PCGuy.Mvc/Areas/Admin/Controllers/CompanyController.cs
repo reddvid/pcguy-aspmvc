@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PCGuy.DataAccess.Contracts;
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 using PCGuy.DataAccess.Repository;
-using PCGuy.Entities.ViewModels;
+using PCGuy.Models.ViewModels;
 using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Admin.Controllers;

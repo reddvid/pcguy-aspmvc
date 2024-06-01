@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PCGuy.DataAccess.Contracts;
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Helpers;
 

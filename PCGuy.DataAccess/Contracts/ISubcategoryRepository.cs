@@ -1,4 +1,4 @@
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 
 namespace PCGuy.DataAccess.Contracts;
 

@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PCGuy.Entities.Entities;
+namespace PCGuy.Models.Entities;
 
 public class Subcategory
 {

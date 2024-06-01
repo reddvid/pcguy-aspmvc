@@ -3,14 +3,14 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PCGuy.DataAccess.Contracts;
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 using PCGuy.DataAccess.Repository;
-using PCGuy.Entities.ViewModels;
+using PCGuy.Models.ViewModels;
 using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Customer.Controllers;
 
-[Area("Customer")]
+[Area(nameof(Customer))]
 public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork) : Controller
 {
     public async Task<IActionResult> Index()

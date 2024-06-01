@@ -1,4 +1,4 @@
-namespace PCGuy.Entities.ViewModels;
+namespace PCGuy.Models.ViewModels;
 
 public class ErrorViewModel
 {

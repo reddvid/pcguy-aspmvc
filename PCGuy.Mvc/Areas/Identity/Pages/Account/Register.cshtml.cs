@@ -23,7 +23,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PCGuy.DataAccess.Contracts;
-using PCGuy.Entities.Entities;
+using PCGuy.Models.Entities;
 using PCGuy.Helpers;
 
 namespace PCGuy.Mvc.Areas.Identity.Pages.Account

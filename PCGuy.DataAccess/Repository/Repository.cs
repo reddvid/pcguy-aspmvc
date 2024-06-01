@@ -11,12 +11,17 @@ public class Repository<T>(ApplicationDbContext db) : IRepository<T>
     private readonly DbSet<T> _dbSet = db.Set<T>();
     private readonly char[] _separator = [','];
 
-    public async Task<IEnumerable<T>> GetAllAsync(string? includeProperties = null)
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter, string? includeProperties = null)
     {
         IQueryable<T> query = _dbSet;
+
+        if (filter is not null) query = query.Where(filter);
+
         if (string.IsNullOrEmpty(includeProperties)) return await query.ToListAsync();
+        
         query = includeProperties.Split(_separator, StringSplitOptions.RemoveEmptyEntries)
             .Aggregate(query, (current, includeProperty) => current.Include(includeProperty.Trim()));
+        
         return await query.ToListAsync();
     }
 
@@ -30,7 +35,7 @@ public class Repository<T>(ApplicationDbContext db) : IRepository<T>
 
         query = includeProperties.Split(_separator, StringSplitOptions.RemoveEmptyEntries)
             .Aggregate(query, (current, includeProperty) => current.Include(includeProperty.Trim()));
-        
+
         return await query.FirstOrDefaultAsync();
     }
 

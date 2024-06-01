@@ -7,7 +7,7 @@ public static class EnumerableExtensions
         return source.Shuffle(new Random());
     }
 
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng)
+    private static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random rng)
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(rng);
