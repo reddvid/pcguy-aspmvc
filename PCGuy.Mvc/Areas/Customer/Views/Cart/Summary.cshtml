@@ -1,3 +1,4 @@
+@using System.Globalization
 @model ShoppingCartViewModel
 
 @{
@@ -6,7 +7,7 @@
 
 
 <form method="post">
-    <br />
+    <br/>
     <div class="container">
         <div class="card shadow border-0">
 
@@ -36,7 +37,7 @@
                                     <label>Name</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.Name"/>
+                                    <input class="form-control" asp-for="OrderHeader.Name"/>
                                     <span asp-validation-for="OrderHeader.Name" class="text-danger"></span>
                                 </div>
                             </div>
@@ -45,7 +46,7 @@
                                     <label>Phone</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.PhoneNumber"/>
+                                    <input class="form-control" asp-for="OrderHeader.PhoneNumber"/>
                                     <span asp-validation-for="OrderHeader.PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
@@ -54,7 +55,7 @@
                                     <label>Street Address</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.StreetAddress"/>
+                                    <input class="form-control" asp-for="OrderHeader.StreetAddress"/>
                                     <span asp-validation-for="OrderHeader.StreetAddress" class="text-danger"></span>
                                 </div>
                             </div>
@@ -63,7 +64,7 @@
                                     <label>City</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.City"/>
+                                    <input class="form-control" asp-for="OrderHeader.City"/>
                                     <span asp-validation-for="OrderHeader.City" class="text-danger"></span>
                                 </div>
                             </div>
@@ -72,7 +73,7 @@
                                     <label>State</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.State"/>
+                                    <input class="form-control" asp-for="OrderHeader.State"/>
                                     <span asp-validation-for="OrderHeader.State" class="text-danger"></span>
                                 </div>
                             </div>
@@ -81,7 +82,7 @@
                                     <label>Postal Code</label>
                                 </div>
                                 <div class="col-9">
-                                    <input  class="form-control" asp-for="OrderHeader.PostalCode"/>
+                                    <input class="form-control" asp-for="OrderHeader.PostalCode"/>
                                     <span asp-validation-for="OrderHeader.PostalCode" class="text-danger"></span>
                                 </div>
                             </div>
@@ -91,18 +92,21 @@
                                 <span class="text-info">Order Summary:</span>
                             </h4>
                             <ul class="list-group mb-3">
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <div>
-                                        <h6 class="my-0">Title</h6>
-                                        <small class="text-muted">Quantity: Count</small>
-                                    </div>
-                                    <span class="text-muted">Price * Count </span>
-                                </li>
+                                @foreach (var item in Model.ShoppingCartList)
+                                {
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="my-0">@item.Product.Name </h6>
+                                            <small class="text-muted">Quantity: @item.Count</small>
+                                        </div>
+                                        <span class="text-muted">@((item.Product.Price * item.Count).ToString("C", new CultureInfo("fil-PH")))</span>
+                                    </li>
+                                }
 
 
                                 <li class="list-group-item d-flex justify-content-between bg-light">
-                                    <small class="text-info">Total (USD)</small>
-                                    <strong class="text-info">$$</strong>
+                                    <small class="text-info">Total</small>
+                                    <strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("C", new CultureInfo("fil-PH"))</strong>
                                 </li>
                             </ul>
                         </div>
@@ -112,7 +116,8 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-12 col-md-8 pt-2">
-                        <p style="color:maroon; font-size:14px;">Estimate Arrival Date:
+                        <p style="color:maroon; font-size:14px;">
+                            Estimate Arrival Date:
 
                         </p>
                     </div>

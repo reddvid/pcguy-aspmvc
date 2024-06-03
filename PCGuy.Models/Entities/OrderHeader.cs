@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace PCGuy.Models.Entities;
@@ -32,4 +33,5 @@ public class OrderHeader
     [Required] public string? State { get; set; }
     [Required] public string? PostalCode { get; set; }
     [Required] public string? Name { get; set; }
+
 }
