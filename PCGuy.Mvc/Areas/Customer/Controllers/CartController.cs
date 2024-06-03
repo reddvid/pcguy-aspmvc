@@ -15,16 +15,17 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
     public async Task<IActionResult> Index()
     {
         var claimsIdentity = User.Identity as ClaimsIdentity;
-        var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+        var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         CartViewModel = new ShoppingCartViewModel
         {
-            ShoppingCartList = await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == userId, "Product")
+            ShoppingCartList = await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == userId, "Product"),
+            OrderHeader = new()
         };
 
         foreach (var cart in CartViewModel.ShoppingCartList)
         {
-            CartViewModel.OrderTotal += cart.Product.Price * cart.Count;
+            CartViewModel.OrderHeader!.OrderTotal += cart.Product.Price * cart.Count;
         }
 
         return View(CartViewModel);
@@ -73,6 +74,28 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
     public async Task<IActionResult> Summary()
     {
-        return View();
+        var claimsIdentity = User.Identity as ClaimsIdentity;
+        var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        CartViewModel = new ShoppingCartViewModel
+        {
+            ShoppingCartList = await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == userId, "Product"),
+            OrderHeader = new()
+        };
+
+        CartViewModel.OrderHeader.ApplicationUser = await unitOfWork.ApplicationUser.GetAsync(o => o.Id == userId);
+        CartViewModel.OrderHeader.Name = CartViewModel.OrderHeader.ApplicationUser!.Name;
+        CartViewModel.OrderHeader.PhoneNumber = CartViewModel.OrderHeader.ApplicationUser!.PhoneNumber;
+        CartViewModel.OrderHeader.StreetAddress = CartViewModel.OrderHeader.ApplicationUser!.StreetAddress;
+        CartViewModel.OrderHeader.City = CartViewModel.OrderHeader.ApplicationUser!.City;
+        CartViewModel.OrderHeader.State = CartViewModel.OrderHeader.ApplicationUser!.State;
+        CartViewModel.OrderHeader.PostalCode = CartViewModel.OrderHeader.ApplicationUser!.PostalCode;
+        
+        foreach (var cart in CartViewModel.ShoppingCartList)
+        {
+            CartViewModel.OrderHeader.OrderTotal += cart.Product.Price * cart.Count;
+        }
+        
+        return View(CartViewModel);
     }
 }
