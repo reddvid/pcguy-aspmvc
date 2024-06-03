@@ -13,6 +13,8 @@ public class UnitOfWork : IUnitOfWork
     public ICompanyRepository Company { get; }
     public IShoppingCartRepository ShoppingCart { get; }
     public IApplicationUserRepository ApplicationUser { get; }
+    public IOrderHeaderRepository OrderHeader { get; }
+    public IOrderDetailRepository OrderDetail { get; }
 
     public UnitOfWork(ApplicationDbContext db)
     {
@@ -24,6 +26,8 @@ public class UnitOfWork : IUnitOfWork
         Company = new CompanyRepository(_db);
         ShoppingCart = new ShoppingCartRepository(_db);
         ApplicationUser = new ApplicationUserRepository(_db);
+        OrderHeader = new OrderHeaderRepository(_db);
+        OrderDetail = new OrderDetailRepository(_db);
     }
 
     public async Task SaveAsync()

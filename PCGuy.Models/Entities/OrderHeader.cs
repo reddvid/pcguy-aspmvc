@@ -6,7 +6,7 @@ namespace PCGuy.Models.Entities;
 
 public class OrderHeader
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
     public string? ApplicationUserId { get; set; }
     [ForeignKey("ApplicationUserId")]
     [ValidateNever]
