@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using PCGuy.Models.Entities;
 
 namespace PCGuy.DataAccess.Data;
@@ -16,7 +17,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ApplicationUser> ApplicationUsers { get; init; }
     public DbSet<ShoppingCart> ShoppingCarts { get; init; }
     public DbSet<Company> Companies { get; init; }
-
+    public DbSet<OrderHeader> OrderHeaders { get; init; }
+    public DbSet<OrderDetail> OrderDetails { get; init; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
