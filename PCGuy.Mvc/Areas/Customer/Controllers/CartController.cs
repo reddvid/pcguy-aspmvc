@@ -5,6 +5,10 @@ using PCGuy.DataAccess.Contracts;
 using PCGuy.Helpers;
 using PCGuy.Models.Entities;
 using PCGuy.Models.ViewModels;
+using Stripe.Checkout;
+using Stripe.FinancialConnections;
+using Session = Stripe.Checkout.Session;
+using SessionService = Stripe.FinancialConnections.SessionService;
 
 namespace PCGuy.Mvc.Areas.Customer.Controllers;
 
@@ -116,7 +120,8 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         CartViewModel.OrderHeader.ApplicationUserId = userId;
         ApplicationUser? appUser = await unitOfWork.ApplicationUser.GetAsync(o => o.Id == userId);
 
-        var shoppingCartList = CartViewModel.ShoppingCartList.ToList();
+        var shoppingCarts = CartViewModel.ShoppingCartList.ToList();
+        var shoppingCartList = shoppingCarts.ToList();
 
         foreach (var cart in shoppingCartList)
         {
@@ -153,6 +158,42 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
         if (appUser?.CompanyId.GetValueOrDefault() == 0) // Regular Customer Account
         {
+            var domain = "https://localhost:7208/";
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                SuccessUrl = $"{domain}customer/cart/OrderConfirmation?id={CartViewModel.OrderHeader.Id}",
+                CancelUrl = $"{domain}customer/cart/index",
+                LineItems = [],
+                Mode = "payment",
+            };
+
+            foreach (var item in shoppingCarts)
+            {
+                var sessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Product.Price * 100),
+                        Currency = "PHP",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions()
+                        {
+                            Name = item.Product.Name
+                        }
+                    },
+                    Quantity = item.Count,
+                };
+                
+                options.LineItems.Add(sessionLineItem);
+            }
+            
+            var service = new Stripe.Checkout.SessionService();
+            var session = await service.CreateAsync(options);
+            
+            await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(CartViewModel.OrderHeader.Id, session.Id, session.PaymentIntentId);
+            await unitOfWork.SaveAsync();
+            
+            Response.Headers["Location"] = session.Url;
+            return new StatusCodeResult(303);
         }
         else // Company User
         {
@@ -161,8 +202,32 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         return RedirectToAction(nameof(OrderConfirmation), new { id = CartViewModel.OrderHeader.Id });
     }
 
-    public IActionResult OrderConfirmation(int id)
+    public async Task<IActionResult> OrderConfirmation(int id)
     {
+        OrderHeader? orderHeader = await unitOfWork.OrderHeader.GetAsync(o => o.Id == id, "ApplicationUser");
+
+        if (orderHeader is null) return NotFound();
+
+        if (orderHeader.PaymentStatus != PaymentStatus.DELAYED_PAYMENT)
+        {
+            var service = new Stripe.Checkout.SessionService();
+            var session = await service.GetAsync(orderHeader.SessionId);
+
+            if (session.PaymentStatus.ToLower() == "paid")
+            {
+                await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(id, session.Id, session.PaymentIntentId);
+                await unitOfWork.OrderHeader.UpdateStatusAsync(id, OrderStatus.APPROVED, PaymentStatus.APPROVED);
+                await unitOfWork.SaveAsync();
+            }
+        }
+
+        var carts = await unitOfWork.ShoppingCart.GetAllAsync(o =>
+            o.ApplicationUserId == orderHeader.ApplicationUserId);
+        
+        unitOfWork.ShoppingCart.RemoveRange(carts);
+
+        await unitOfWork.SaveAsync();
+        
         return View(id);
     }
 }
