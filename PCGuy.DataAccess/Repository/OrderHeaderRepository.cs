@@ -16,24 +16,33 @@ public class OrderHeaderRepository(ApplicationDbContext db) : Repository<OrderHe
     {
         var order = await _db.OrderHeaders.FirstOrDefaultAsync(o => o.Id == id);
 
-        if (order is null) return;
-        order.OrderStatus = orderStatus;
+        if (order is not null)
+        {
+            order.OrderStatus = orderStatus;
 
-        if (string.IsNullOrEmpty(paymentStatus)) return;
-        order.PaymentStatus = paymentStatus;
+            if (!string.IsNullOrEmpty(paymentStatus))
+            {
+                order.PaymentStatus = paymentStatus;
+            }
+        }
     }
 
     public async Task UpdateStripePaymentIdAsync(int id, string sessionId, string paymentIntentId)
     {
         var order = await _db.OrderHeaders.FirstOrDefaultAsync(o => o.Id == id);
 
-        if (order is null) return;
-        
-        if (string.IsNullOrEmpty(sessionId)) return;
-        order.SessionId = sessionId;
+        if (order is not null)
+        {
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                order.SessionId = sessionId;
+            }
 
-        if (string.IsNullOrEmpty(paymentIntentId)) return;
-        order.PaymentIntentId = paymentIntentId;
-        order.PaymentDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(paymentIntentId))
+            {
+                order.PaymentIntentId = paymentIntentId;
+                order.PaymentDate = DateTime.Now;
+            }
+        }
     }
 }

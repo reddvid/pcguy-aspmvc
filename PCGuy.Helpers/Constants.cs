@@ -17,6 +17,8 @@ public static class PaymentStatus
     public const string APPROVED = "Approved";
     public const string DELAYED_PAYMENT = "ApprovedForDelayedPayment";
     public const string REJECTED = "Rejected";
+    public const string CANCELLED = "Cancelled";
+    public const string REFUNDED = "Refunded";
 }
 
 public static class Roles

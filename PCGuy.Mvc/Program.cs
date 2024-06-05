@@ -55,6 +55,7 @@ else
     app.UseHsts();
 }
 
+app.UseRequestLocalization("fil-PH", "en-PH");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

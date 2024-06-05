@@ -18,7 +18,7 @@ public class Product
     public string? Description { get; init; }
     public string? Specifications { get; init; }
     [Required] public float Price { get; init; }
-    [NotMapped] public string DisplayPrice => Price.ToString("C", new CultureInfo("fil-PH"));
+    [NotMapped] public string DisplayPrice => Price.ToString("C");
     public double Discount { get; init; }
     public bool IsOnSale => Discount > 0;
    

@@ -18,7 +18,7 @@
                         @Model.Product.Subcategory!.Name
                     </div>
                     <h4 class="text-dark mt-2">@Model.Product.Name</h4>
-                    <p class="text-primary-emphasis">@Model.Product.DisplayPrice</p>
+                    <p class="text-primary-emphasis">@Model.Product.Price.ToString("C")</p>
                     <p class="text-primary">@Model.Product.Brand?.Name</p>
                     <div class="row pl-2 my-3">
                         <div class="col-md-4">

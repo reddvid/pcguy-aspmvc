@@ -9,21 +9,22 @@ public class OrderHeader
 {
     public int Id { get; init; }
     public string? ApplicationUserId { get; set; }
+
     [ForeignKey("ApplicationUserId")]
     [ValidateNever]
-    public ApplicationUser? ApplicationUser { get; set; }
+    public ApplicationUser ApplicationUser { get; set; } = default!;
 
     public DateTime OrderDate { get; set; }
-    public DateTime ShippingDate { get; init; }
+    public DateTime ShippingDate { get; set; }
     public double OrderTotal { get; set; }
 
     public string? OrderStatus { get; set; }
     public string? PaymentStatus { get; set; }
-    public string? TrackingNumber { get; init; }
-    public string? Carrier { get; init; }
+    public string? TrackingNumber { get; set; }
+    public string? Carrier { get; set; }
 
     public DateTime PaymentDate { get; set; }
-    public DateOnly PaymentDueDate { get; init; }
+    public DateOnly PaymentDueDate { get; set; }
 
     public string? SessionId { get; set; }
     public string? PaymentIntentId { get; set; }
