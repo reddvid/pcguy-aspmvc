@@ -1,0 +1,145 @@
+@{
+    ViewData["Title"] = "Orders";
+
+    var status = Context.Request.Query["status"];
+    var processing = "text-primary";
+    var pending = "text-primary";
+    var completed = "text-primary";
+    var approved = "text-primary";
+    var all = "text-primary";
+
+    switch (status)
+    {
+        case "processing":
+            processing = "active text-white bg-primary";
+            break;
+        case "pending":
+            pending = "active text-white bg-primary";
+            break;
+        case "completed":
+            completed = "active text-white bg-primary";
+            break;
+        case "approved":
+            approved = "active text-white bg-primary";
+            break;
+        default:
+            all = "active text-white bg-primary";
+            break;
+    }
+}
+
+<div class="row mb-3 ">
+    <div class="col-6">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+
+<div class="row card-body">
+    <div class="d-flex justify-content-between  pb-5 pt-2">
+        <span></span>
+        <ul class="list-group list-group-horizontal-sm">
+            <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="processing">
+                <li class="list-group-item @processing">In Process</li>
+            </a>
+            <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+                <li class="list-group-item @pending">Payment Pending</li>
+            </a>
+            <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                <li class="list-group-item @completed">Completed</li>
+            </a>
+            <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                <li class="list-group-item @approved">Approved</li>
+            </a>
+            <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                <li class="list-group-item @all">All</li>
+            </a>
+        </ul>
+    </div>
+    <table id="dataTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    @* <script src="~/js/product.js"></script> *@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let url = window.location.search;
+            if (url.includes("processing")) {
+                loadDataTable("processing");
+            } else if (url.includes("pending")) {
+                loadDataTable("pending");
+            } else if (url.includes("approved")) {
+                loadDataTable("approved");
+            } else if (url.includes("completed")) {
+                loadDataTable("completed");
+            } else {
+                loadDataTable("all");
+            }
+        });
+
+        let dataTable;
+
+        function loadDataTable(status) {
+            dataTable = $('#dataTable').DataTable({
+                "ajax": {url: '/admin/order/getall?status=' + status},
+                "columns": [
+                    {data: 'id', "width": "5%"},
+                    {data: 'name', "width": "25%"},
+                    {data: 'phoneNumber', "width": "20%"},
+                    {data: 'applicationUser.email', "width": "25%"},
+                    {data: 'orderStatus', "width": "15%"},
+                    {data: 'orderTotal', render: $.fn.dataTable.render.number(',', '.', 2, '₱')},
+                    {
+                        data: 'id',
+                        render: function (data) {
+                            return ` <div class="w-75 btn-group" role="group">
+                                        <a class="link-info mx-2" href="/admin/order/details?orderId=${data}">Order Details</a>
+                                    </div>`
+                        },
+                        "width": "5%"
+                    }
+                ]
+            });
+        }
+
+        function Delete(url) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (data) {
+                            dataTable.ajax.reload();
+                            toastr.success(data.message);
+                        },
+                        error: function (data) {
+                            dataTable.ajax.reload();
+                            toastr.error(data.message);
+                        }
+                    })
+                }
+            });
+        }
+
+    </script>
+}
