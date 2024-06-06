@@ -90,7 +90,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
             OrderHeader = new()
         };
 
-        CartViewModel.OrderHeader.ApplicationUser = await unitOfWork.ApplicationUser.GetAsync(o => o.Id == userId);
+        CartViewModel.OrderHeader.ApplicationUser = (await unitOfWork.ApplicationUser.GetAsync(o => o.Id == userId))!;
         CartViewModel.OrderHeader.Name = CartViewModel.OrderHeader.ApplicationUser!.Name;
         CartViewModel.OrderHeader.PhoneNumber = CartViewModel.OrderHeader.ApplicationUser!.PhoneNumber;
         CartViewModel.OrderHeader.StreetAddress = CartViewModel.OrderHeader.ApplicationUser!.StreetAddress;
@@ -121,9 +121,8 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         ApplicationUser? appUser = await unitOfWork.ApplicationUser.GetAsync(o => o.Id == userId);
 
         var shoppingCarts = CartViewModel.ShoppingCartList.ToList();
-        var shoppingCartList = shoppingCarts.ToList();
 
-        foreach (var cart in shoppingCartList)
+        foreach (var cart in shoppingCarts)
         {
             CartViewModel.OrderHeader.OrderTotal += cart.Product.Price * cart.Count;
         }
@@ -142,7 +141,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         await unitOfWork.OrderHeader.AddAsync(CartViewModel.OrderHeader);
         await unitOfWork.SaveAsync();
 
-        foreach (var orderDetail in shoppingCartList.Select(
+        foreach (var orderDetail in shoppingCarts.Select(
                      cart => new OrderDetail
                      {
                          ProductId = cart.ProductId,
@@ -158,6 +157,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
         if (appUser?.CompanyId.GetValueOrDefault() == 0) // Regular Customer Account
         {
+            // STRIPE LOGIC
             var domain = "https://localhost:7208/";
             var options = new Stripe.Checkout.SessionCreateOptions
             {

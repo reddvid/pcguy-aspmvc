@@ -1,0 +1,20 @@
+@model int
+
+@{
+    ViewData["Title"] = "Payment Confirmed";
+}
+
+<div class="container row pt-4">
+    <div class="col-12 text-center">
+        <h1 class="text-primary-emphasis text-center">Payment Confirmed</h1>
+        Your Order Number is: @Model <br/><br/>
+        <img src="~/images/" width="65%"/>
+    </div>
+    <div class="col-12 text-center" style="color: maroon">
+        <p>
+            Your payment is successful!
+        </p> 
+        <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-orderId="@Model"
+           class="btn btn-primary">Back to Order Details</a>
+    </div>
+</div>
