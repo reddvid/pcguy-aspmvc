@@ -1,4 +1,3 @@
-
 <div class="row mb-3 ">
     <div class="col-6">
         <h1>@ViewData["Title"]</h1>
@@ -16,6 +15,7 @@
         <tr>
             <th>Name</th>
             <th>Price</th>
+            <th>Stock</th>
             <th>Subcategory</th>
             <th>Category</th>
             <th>Actions</th>
@@ -39,14 +39,15 @@
                 "ajax": {url: '/admin/product/getall'},
                 "columns": [
                     {data: 'name'},
-                    {data: 'displayPrice'}, // render: $.fn.dataTable.render.number(',', '.', 2, '₱')
+                    {data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '₱')},
+                    {data: 'stock'},
                     {data: 'subcategory.name'},
                     {data: 'subcategory.category.name'},
                     {
                         data: 'id',
                         render: function (data) {
                             return ` <div class="w-75 btn-group" role="group">
-                        <a class="link-info mx-2" href="/admin/product/upsert?id=${data}">Edit</a>
+                        <a class="link-info mx-2" href="/admin/product/upsert?productId=${data}">Edit</a>
                         <a class="link-danger ms-2" style="cursor:pointer;" onclick="Delete('/admin/product/delete/${data}')">Delete</a>
                     </div>`
                         }

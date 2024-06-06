@@ -22,6 +22,8 @@ public class Product
     public double Discount { get; init; }
     public bool IsOnSale => Discount > 0;
    
+    [Required] public int Stock { get; set; }
+    
     [DisplayName("Brand Name")]
     public int BrandId { get; init; }
 

@@ -12,6 +12,13 @@
         <h4>@Model.Name</h4>
         <p class="text-primary-emphasis">@Model.Price.ToString("C")</p>
         <p class="text-primary">@Model.Brand?.Name</p>
-        <a href="#" class="btn btn-primary">Add to cart</a>
+        @if (Model.Stock > 0)
+        {
+            <a href="#" class="btn btn-primary">Add to cart</a>
+        }
+        else
+        {
+            <a class="btn disabled">Sold Out</a>
+        }
     </div>
 </dic>

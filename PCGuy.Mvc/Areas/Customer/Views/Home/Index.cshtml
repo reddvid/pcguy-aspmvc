@@ -46,6 +46,10 @@
                                     <p class="card-title text-warning text-center">@product.Price.ToString("C")</p>
                                 </div>
                             </div>
+                            @if (product.Stock <= 0)
+                            {
+                                <p class="text-center fw-bolder">Out of Stock</p>
+                            }
                             <div>
                                 <a asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary bg-gradient border-0 form-control">
                                     Details

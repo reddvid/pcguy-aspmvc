@@ -19,6 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Company> Companies { get; init; }
     public DbSet<OrderHeader> OrderHeaders { get; init; }
     public DbSet<OrderDetail> OrderDetails { get; init; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -92,7 +93,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 Name = "AMD Ryzen 5 5700X",
                 Price = 11_000,
                 BrandId = brands[0].Id,
-                SubcategoryId = subcategories[15].Id
+                SubcategoryId = subcategories[15].Id,
+                Stock = 10
             },
             new()
             {
@@ -100,7 +102,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 Name = "MSI B550 PRO-VDH WIFI",
                 Price = 2_500,
                 BrandId = brands[15].Id,
-                SubcategoryId = subcategories[16].Id
+                SubcategoryId = subcategories[16].Id, 
+                Stock = 10
             },
             new()
             {
@@ -108,7 +111,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 Name = "SilverStone PF240-ARGB",
                 Price = 1_500,
                 BrandId = brands[21].Id,
-                SubcategoryId = subcategories[17].Id
+                SubcategoryId = subcategories[17].Id, 
+                Stock = 10
             },
             new()
             {
@@ -116,7 +120,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 Name = "HyperX Fury 16GB",
                 Price = 2_500,
                 BrandId = brands[16].Id,
-                SubcategoryId = subcategories[10].Id
+                SubcategoryId = subcategories[10].Id, 
+                Stock = 10
             },
             new()
             {
@@ -124,7 +129,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 Name = "Samsung 970 EVO Plus",
                 Price = 4_500,
                 BrandId = brands[6].Id,
-                SubcategoryId = subcategories[14].Id
+                SubcategoryId = subcategories[14].Id, 
+                Stock = 10
             },
         };
 

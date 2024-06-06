@@ -13,7 +13,6 @@ namespace PCGuy.Mvc.Areas.Admin.Controllers;
 [Authorize(Roles = Roles.ADMIN)]
 public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment) : Controller
 {
-    [Route("products/")]
     public async Task<IActionResult> Index()
     {
         var products = await unitOfWork.Product
@@ -24,29 +23,29 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
         return View(products);
     }
 
-    [Route("products/{id:int}")]
-    public async Task<IActionResult> Index(int? id)
-    {
-        var products = await unitOfWork.Product
-            .GetAllAsync(null, "Subcategory, Subcategory.Category");
-
-        if (id is null or 0)
-        {
-            ViewData["Title"] = "All Products";
-            return View(products);
-        }
-
-        var category = await unitOfWork.Category.GetAsync(o => o.Id == id);
-        if (category is null) return View(products);
-
-        var filteredProductsBySubcategory = products.Where(p => p.Subcategory?.Category?.Id == id)
-            .ToList();
-
-        ViewData["Title"] = category.Name;
-        TempData["ProductSubcategoryId"] = id;
-
-        return View(filteredProductsBySubcategory);
-    }
+    // [Route("products/{id:int}")]
+    // public async Task<IActionResult> Index(int? id)
+    // {
+    //     var products = await unitOfWork.Product
+    //         .GetAllAsync(null, "Subcategory, Subcategory.Category");
+    //
+    //     if (id is null or 0)
+    //     {
+    //         ViewData["Title"] = "All Products";
+    //         return View(products);
+    //     }
+    //
+    //     var category = await unitOfWork.Category.GetAsync(o => o.Id == id);
+    //     if (category is null) return View(products);
+    //
+    //     var filteredProductsBySubcategory = products.Where(p => p.Subcategory?.Category?.Id == id)
+    //         .ToList();
+    //
+    //     ViewData["Title"] = category.Name;
+    //     TempData["ProductSubcategoryId"] = id;
+    //
+    //     return View(filteredProductsBySubcategory);
+    // }
 
     public async Task<IActionResult> Upsert(int? productId)
     {

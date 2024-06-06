@@ -27,12 +27,12 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         CartViewModel = new ShoppingCartViewModel
         {
             ShoppingCartList = await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == userId, "Product"),
-            OrderHeader = new()
+            OrderHeader = new OrderHeader()
         };
 
         foreach (var cart in CartViewModel.ShoppingCartList)
         {
-            CartViewModel.OrderHeader!.OrderTotal += cart.Product.Price * cart.Count;
+            CartViewModel.OrderHeader.OrderTotal += cart.Product.Price * cart.Count;
         }
 
         return View(CartViewModel);
@@ -41,6 +41,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
     public async Task<IActionResult> Increment(int cartId)
     {
         var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId);
+        
         cartFromDb!.Count += 1;
 
         unitOfWork.ShoppingCart.Update(cartFromDb);
