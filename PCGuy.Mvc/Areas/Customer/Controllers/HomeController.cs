@@ -15,6 +15,15 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
 {
     public async Task<IActionResult> Index()
     {
+        var claimsIdentity = User.Identity as ClaimsIdentity;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        
+        if (claim is not null)
+        {
+            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+                o.ApplicationUserId == claim.Value)).Count());
+        }
+        
         IEnumerable<Product> products = await unitOfWork.Product.GetAllAsync();
         products = products.Shuffle().Take(10);
         return View(products);
@@ -51,15 +60,18 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
         {
             cartFromDb.Count += cart.Count;
             unitOfWork.ShoppingCart.Update(cartFromDb);
+            await unitOfWork.SaveAsync();
         }
         else // Add Cart
         {
             await unitOfWork.ShoppingCart.AddAsync(cart);
+            await unitOfWork.SaveAsync();
+            
+            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+                o.ApplicationUserId == userId)).Count());
         }
 
         TempData["success"] = "Cart updated";
-
-        await unitOfWork.SaveAsync();
 
         return RedirectToAction(nameof(Index));
     }

@@ -6,9 +6,6 @@ using PCGuy.Helpers;
 using PCGuy.Models.Entities;
 using PCGuy.Models.ViewModels;
 using Stripe.Checkout;
-using Stripe.FinancialConnections;
-using Session = Stripe.Checkout.Session;
-using SessionService = Stripe.FinancialConnections.SessionService;
 
 namespace PCGuy.Mvc.Areas.Customer.Controllers;
 
@@ -22,8 +19,16 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
     public async Task<IActionResult> Index()
     {
         var claimsIdentity = User.Identity as ClaimsIdentity;
-        var userId = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        
+        if (claim is not null)
+        {
+            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+                o.ApplicationUserId == claim.Value)).Count());
+        }
 
+        var userId = claim.Value;
+        
         CartViewModel = new ShoppingCartViewModel
         {
             ShoppingCartList = await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == userId, "Product"),
@@ -41,7 +46,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
     public async Task<IActionResult> Increment(int cartId)
     {
         var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId);
-        
+
         cartFromDb!.Count += 1;
 
         unitOfWork.ShoppingCart.Update(cartFromDb);
@@ -52,11 +57,14 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
     public async Task<IActionResult> Decrement(int cartId)
     {
-        var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId);
+        var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId, isTracked: true);
 
-        if (cartFromDb!.Count <= 1)
+        if (cartFromDb.Count <= 1)
         {
             // Remove from cart
+            HttpContext.Session.SetInt32(Sessions.Cart,
+                (await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == cartFromDb.ApplicationUserId))
+                .Count() - 1);
             unitOfWork.ShoppingCart.Remove(cartFromDb);
         }
         else
@@ -72,9 +80,13 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
     public async Task<IActionResult> Remove(int cartId)
     {
-        var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId);
+        var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId, isTracked: false);
 
-        unitOfWork.ShoppingCart.Remove(cartFromDb!);
+        HttpContext.Session.SetInt32(Sessions.Cart,
+            (await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == cartFromDb.ApplicationUserId))
+            .Count() - 1);
+
+        unitOfWork.ShoppingCart.Remove(cartFromDb);
         await unitOfWork.SaveAsync();
 
         return RedirectToAction(nameof(Index));
@@ -183,16 +195,17 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
                     },
                     Quantity = item.Count,
                 };
-                
+
                 options.LineItems.Add(sessionLineItem);
             }
-            
+
             var service = new Stripe.Checkout.SessionService();
             var session = await service.CreateAsync(options);
-            
-            await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(CartViewModel.OrderHeader.Id, session.Id, session.PaymentIntentId);
+
+            await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(CartViewModel.OrderHeader.Id, session.Id,
+                session.PaymentIntentId);
             await unitOfWork.SaveAsync();
-            
+
             Response.Headers["Location"] = session.Url;
             return new StatusCodeResult(303);
         }
@@ -224,11 +237,11 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
 
         var carts = await unitOfWork.ShoppingCart.GetAllAsync(o =>
             o.ApplicationUserId == orderHeader.ApplicationUserId);
-        
+
         unitOfWork.ShoppingCart.RemoveRange(carts);
 
         await unitOfWork.SaveAsync();
-        
+
         return View(id);
     }
 }

@@ -145,9 +145,10 @@ public class OrderController(IUnitOfWork unitOfWork) : Controller
     {
         OrderViewModel.OrderHeader =
             await unitOfWork.OrderHeader.GetAsync(o => o.Id == OrderViewModel.OrderHeader.Id, "ApplicationUser");
-        
-        OrderViewModel.OrderDetails = await unitOfWork.OrderDetail.GetAllAsync(o => o.OrderHeaderId == OrderViewModel.OrderHeader.Id, "Product");
-        
+
+        OrderViewModel.OrderDetails =
+            await unitOfWork.OrderDetail.GetAllAsync(o => o.OrderHeaderId == OrderViewModel.OrderHeader.Id, "Product");
+
         // STRIPE LOGIC
         var domain = "https://localhost:7208/";
         var options = new Stripe.Checkout.SessionCreateOptions
@@ -159,7 +160,7 @@ public class OrderController(IUnitOfWork unitOfWork) : Controller
         };
 
         var orderDetails = OrderViewModel.OrderDetails.ToList();
-        
+
         foreach (var item in orderDetails)
         {
             var sessionLineItem = new SessionLineItemOptions
@@ -175,21 +176,22 @@ public class OrderController(IUnitOfWork unitOfWork) : Controller
                 },
                 Quantity = item.Count,
             };
-                
+
             options.LineItems.Add(sessionLineItem);
         }
-            
+
         var service = new SessionService();
         var session = await service.CreateAsync(options);
-            
-        await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(OrderViewModel.OrderHeader.Id, session.Id, session.PaymentIntentId);
+
+        await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(OrderViewModel.OrderHeader.Id, session.Id,
+            session.PaymentIntentId);
         await unitOfWork.SaveAsync();
-            
+
         Response.Headers.Location = session.Url;
-        
+
         return new StatusCodeResult(303);
     }
-    
+
     public async Task<IActionResult> PaymentConfirmation(int orderHeaderId)
     {
         OrderHeader? orderHeader = await unitOfWork.OrderHeader.GetAsync(o => o.Id == orderHeaderId);
@@ -203,12 +205,14 @@ public class OrderController(IUnitOfWork unitOfWork) : Controller
 
             if (session.PaymentStatus.Equals("paid", StringComparison.CurrentCultureIgnoreCase))
             {
-                await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(orderHeaderId, session.Id, session.PaymentIntentId);
-                await unitOfWork.OrderHeader.UpdateStatusAsync(orderHeaderId, orderHeader.OrderStatus, PaymentStatus.APPROVED);
+                await unitOfWork.OrderHeader.UpdateStripePaymentIdAsync(orderHeaderId, session.Id,
+                    session.PaymentIntentId);
+                await unitOfWork.OrderHeader.UpdateStatusAsync(orderHeaderId, orderHeader.OrderStatus,
+                    PaymentStatus.APPROVED);
                 await unitOfWork.SaveAsync();
             }
         }
-        
+
         return View(orderHeaderId);
     }
 
@@ -221,7 +225,7 @@ public class OrderController(IUnitOfWork unitOfWork) : Controller
 
         if (User.IsInRole(Roles.ADMIN) || User.IsInRole(Roles.EMPLOYEE))
         {
-            orders = await unitOfWork.OrderHeader.GetAllAsync(null, "ApplicationUser");
+            orders = await unitOfWork.OrderHeader.GetAllAsync(includeProperties: "ApplicationUser");
         }
         else
         {

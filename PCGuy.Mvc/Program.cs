@@ -5,6 +5,7 @@ using PCGuy.DataAccess.Contracts;
 using PCGuy.DataAccess.Data;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Helpers;
+using PCGuy.Mvc;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,9 +38,18 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -64,27 +74,11 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
-// app.MapControllerRoute(
-//     name: "products",
-//     pattern: "products/peripherals",
-//     defaults: new { controller = "Product", action = "Index", id = 3 });
-// app.MapControllerRoute(
-//     name: "products",
-//     pattern: "products/pc-parts",
-//     defaults: new { controller = "Product", action = "Index", id = 2 });
-// app.MapControllerRoute(
-//     name: "products",
-//     pattern: "products/software",
-//     defaults: new { controller = "Product", action = "Index", id = 1 });
-// app.MapControllerRoute(
-//     name: "products",
-//     pattern: "products/{id?}",
-//     defaults: new { controller = "Product", action="Index" });
-// app.MapControllerRoute(
-//     name: "products",
-//     pattern: "products",
-//     defaults: new { controller = "Product", action="Index", id = 0 });
+app.MapGets();
+app.MapControllerRoutes();
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{productId?}");

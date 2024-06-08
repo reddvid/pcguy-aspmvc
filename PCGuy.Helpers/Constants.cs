@@ -28,3 +28,8 @@ public static class Roles
     public const string ADMIN = "Admin";
     public const string EMPLOYEE = "Employee";
 }
+
+public static class Sessions
+{
+    public const string Cart = "SessionShoppingCart";
+}

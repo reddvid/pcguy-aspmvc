@@ -16,7 +16,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Index()
     {
         var products = await unitOfWork.Product
-            .GetAllAsync(null,"Subcategory, Subcategory.Category");
+            .GetAllAsync(includeProperties:"Subcategory, Subcategory.Category");
 
         ViewData["Title"] = "Products";
 
@@ -27,7 +27,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     // public async Task<IActionResult> Index(int? id)
     // {
     //     var products = await unitOfWork.Product
-    //         .GetAllAsync(null, "Subcategory, Subcategory.Category");
+    //         .GetAllAsync(includeProperties: "Subcategory, Subcategory.Category");
     //
     //     if (id is null or 0)
     //     {
@@ -146,7 +146,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     public async Task<IActionResult> Details(int? productId)
     {
         var products = await unitOfWork.Product
-            .GetAllAsync(null, "Brand,Subcategory");
+            .GetAllAsync(includeProperties: "Brand,Subcategory");
 
         var product = products.FirstOrDefault(x => x.Id == productId);
         return View(product);
@@ -166,7 +166,7 @@ public class ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHo
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var products = await unitOfWork.Product.GetAllAsync(null,"Subcategory.Category");
+        var products = await unitOfWork.Product.GetAllAsync(includeProperties:"Subcategory.Category");
         return Json(new { data = products });
     }
 

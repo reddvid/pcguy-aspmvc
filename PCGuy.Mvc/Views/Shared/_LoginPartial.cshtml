@@ -1,10 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@using PCGuy.Helpers
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject IHttpContextAccessor HttpContextAccessor
 
 <ul class="navbar-nav">
     <li class="nav-item">
-        <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index"><i class="bi bi-cart"></i><span class="ms-2">&nbsp; (0) View Cart</span></a>
+        <a class="nav-link" asp-area="Customer" asp-controller="Cart" asp-action="Index"><i class="bi bi-cart"></i><span class="ms-2">&nbsp; View Cart (@(HttpContextAccessor.HttpContext!.Session.GetInt32(Sessions.Cart) ?? 0))</span></a>
     </li>
     @if (SignInManager.IsSignedIn(User))
     {
