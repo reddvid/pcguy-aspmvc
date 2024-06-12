@@ -23,7 +23,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         
         if (claim is not null)
         {
-            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+            HttpContext.Session.SetInt32(SessionKeys.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
                 o.ApplicationUserId == claim.Value)).Count());
         }
 
@@ -62,7 +62,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
         if (cartFromDb.Count <= 1)
         {
             // Remove from cart
-            HttpContext.Session.SetInt32(Sessions.Cart,
+            HttpContext.Session.SetInt32(SessionKeys.Cart,
                 (await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == cartFromDb.ApplicationUserId))
                 .Count() - 1);
             unitOfWork.ShoppingCart.Remove(cartFromDb);
@@ -82,7 +82,7 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
     {
         var cartFromDb = await unitOfWork.ShoppingCart.GetAsync(o => o.Id == cartId, isTracked: false);
 
-        HttpContext.Session.SetInt32(Sessions.Cart,
+        HttpContext.Session.SetInt32(SessionKeys.Cart,
             (await unitOfWork.ShoppingCart.GetAllAsync(o => o.ApplicationUserId == cartFromDb.ApplicationUserId))
             .Count() - 1);
 
@@ -233,6 +233,8 @@ public class CartController(IUnitOfWork unitOfWork) : Controller
                 await unitOfWork.OrderHeader.UpdateStatusAsync(id, OrderStatus.APPROVED, PaymentStatus.APPROVED);
                 await unitOfWork.SaveAsync();
             }
+            
+            HttpContext.Session.Remove(SessionKeys.Cart);
         }
 
         var carts = await unitOfWork.ShoppingCart.GetAllAsync(o =>

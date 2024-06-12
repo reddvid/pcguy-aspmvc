@@ -20,7 +20,7 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
         
         if (claim is not null)
         {
-            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+            HttpContext.Session.SetInt32(SessionKeys.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
                 o.ApplicationUserId == claim.Value)).Count());
         }
         
@@ -67,7 +67,7 @@ public class HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWo
             await unitOfWork.ShoppingCart.AddAsync(cart);
             await unitOfWork.SaveAsync();
             
-            HttpContext.Session.SetInt32(Sessions.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
+            HttpContext.Session.SetInt32(SessionKeys.Cart, (await unitOfWork.ShoppingCart.GetAllAsync(o =>
                 o.ApplicationUserId == userId)).Count());
         }
 

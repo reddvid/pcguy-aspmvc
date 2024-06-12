@@ -24,7 +24,7 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<IdentityUser,IdentityRole>()
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -46,6 +46,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = builder.Configuration.GetSection("Facebook:AppId").Get<string>() ??
+                    throw new InvalidOperationException("Facebook AppId not found.");
+    options.AppSecret = builder.Configuration.GetSection("Facebook:AppSecret").Get<string>() ??
+                        throw new InvalidOperationException("Facebook AppSecret not found.");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -53,7 +61,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-    
+
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     // await SeedData.Initialize(services);

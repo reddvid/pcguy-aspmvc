@@ -29,7 +29,7 @@ public static class Roles
     public const string EMPLOYEE = "Employee";
 }
 
-public static class Sessions
+public static class SessionKeys
 {
     public const string Cart = "SessionShoppingCart";
 }

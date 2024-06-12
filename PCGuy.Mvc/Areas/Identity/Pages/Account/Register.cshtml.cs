@@ -121,7 +121,7 @@ namespace PCGuy.Mvc.Areas.Identity.Pages.Account
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
             public int? CompanyId { get; set; }
-            
+
             [ValidateNever] public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
 
@@ -178,7 +178,7 @@ namespace PCGuy.Mvc.Areas.Identity.Pages.Account
                 {
                     user.CompanyId = Input.CompanyId;
                 }
-                
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -211,11 +211,17 @@ namespace PCGuy.Mvc.Areas.Identity.Pages.Account
                         return RedirectToPage("RegisterConfirmation",
                             new { email = Input.Email, returnUrl = returnUrl });
                     }
+
+                    if (User.IsInRole(Roles.ADMIN))
+                    {
+                        TempData["success"] = "New User Created Successfully";
+                    }
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
                     }
+
+                    return LocalRedirect(returnUrl);
                 }
 
                 foreach (var error in result.Errors)
