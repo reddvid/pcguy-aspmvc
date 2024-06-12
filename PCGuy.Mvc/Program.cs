@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PCGuy.DataAccess.Contracts;
 using PCGuy.DataAccess.Data;
+using PCGuy.DataAccess.DbInitializer;
 using PCGuy.DataAccess.Repository;
 using PCGuy.Helpers;
 using PCGuy.Mvc;
@@ -30,6 +31,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -62,9 +64,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
-    // await SeedData.Initialize(services);
+   
 }
 else
 {
@@ -84,12 +84,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+// Initialize Database
+var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+await dbInitializer.InitializeAsync();
+
+// Seed Data
+await SeedData.InitializeAsync(services);
+
 app.MapGets();
+app.MapRazorPages();
 app.MapControllerRoutes();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{productId?}");
-app.MapRazorPages();
 
 app.Run();
+

@@ -128,13 +128,7 @@ namespace PCGuy.Mvc.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!_roleManager.RoleExistsAsync(Roles.CUSTOMER).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(Roles.CUSTOMER)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Roles.COMPANY)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Roles.ADMIN)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(Roles.EMPLOYEE)).GetAwaiter().GetResult();
-            }
+            
 
             Input = new InputModel
             {

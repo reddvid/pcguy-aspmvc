@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PCGuy.Helpers\PCGuy.Helpers.csproj" />
       <ProjectReference Include="..\PCGuy.Models\PCGuy.Models.csproj" />
     </ItemGroup>
 
