@@ -92,7 +92,7 @@ var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
 await dbInitializer.InitializeAsync();
 
 // Seed Data
-await SeedData.InitializeAsync(services);
+// await SeedData.InitializeAsync(services);
 
 app.MapGets();
 app.MapRazorPages();

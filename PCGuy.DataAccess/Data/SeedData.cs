@@ -90,8 +90,6 @@ public abstract class SeedData
 
             await context.AddRangeAsync(brands);
         }
-        
-        
 
         await context.SaveChangesAsync();
     }

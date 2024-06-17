@@ -27,7 +27,7 @@ public class DbInitializer(
         }
 
         // Step 2: Create Roles
-        if (await roleManager.RoleExistsAsync(Roles.CUSTOMER))
+        if (!await roleManager.RoleExistsAsync(Roles.CUSTOMER))
         {
             await roleManager.CreateAsync(new IdentityRole(Roles.CUSTOMER));
             await roleManager.CreateAsync(new IdentityRole(Roles.COMPANY));
@@ -38,7 +38,7 @@ public class DbInitializer(
             await userManager.CreateAsync(
                 new ApplicationUser
                 {
-                    UserName = "admin",
+                    UserName = "hi@reddavid.me",
                     Email = "hi@reddavid.me",
                     Name = "David Ballesteros",
                     PhoneNumber = "111222333444",
@@ -55,9 +55,6 @@ public class DbInitializer(
                 await userManager.AddToRoleAsync(user, Roles.ADMIN);
             }
         }
-        
-        // Step 4: Create category, subcategory, brand lists
-        
         
     }
 }
