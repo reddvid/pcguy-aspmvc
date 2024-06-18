@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace PCGuy.Mvc.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = Roles.ADMIN)]
-public class UserController(ApplicationDbContext db) : Controller
+public class UserController(ApplicationDbContext db, UserManager<IdentityUser> userManager) : Controller
 {
     public IActionResult Index()
     {
@@ -26,13 +27,14 @@ public class UserController(ApplicationDbContext db) : Controller
         ViewData["Title"] = "Manage User Permissions";
 
         string roleId = (await db.UserRoles.FirstOrDefaultAsync(o => o.UserId == userId))!.RoleId;
-        
+
         var roles = await db.Roles.ToListAsync();
         var companies = await db.Companies.ToListAsync();
 
         var manageUserViewModel = new ManageUserViewModel
         {
-            ApplicationUser = await db.ApplicationUsers.Include(o => o.Company).FirstOrDefaultAsync(o => o.Id == userId),
+            ApplicationUser =
+                await db.ApplicationUsers.Include(o => o.Company).FirstOrDefaultAsync(o => o.Id == userId),
             CompanyList = companies.Select(i => new SelectListItem
             {
                 Text = i.Name,
@@ -46,8 +48,42 @@ public class UserController(ApplicationDbContext db) : Controller
         };
 
         manageUserViewModel.ApplicationUser!.Role = (await db.Roles.FirstOrDefaultAsync(o => o.Id == roleId))?.Name;
-        
+
         return View(manageUserViewModel);
+    }
+
+    [HttpPost, ActionName("Manage")]
+    public async Task<IActionResult> ManagePOST(ManageUserViewModel userViewModel)
+    {
+        ViewData["Title"] = "Manage User Permissions";
+
+        string roleId = (await db.UserRoles.FirstOrDefaultAsync(o => o.UserId == userViewModel.ApplicationUser!.Id))!
+            .RoleId;
+        string? oldRole = (await db.Roles.FirstOrDefaultAsync(o => o.Id == roleId))?.Name;
+
+        if (userViewModel.ApplicationUser!.Role != oldRole)
+        {
+            ApplicationUser user =
+                (await db.ApplicationUsers.FirstOrDefaultAsync(o => o.Id == userViewModel.ApplicationUser.Id))!;
+
+            if (userViewModel.ApplicationUser.Role == Roles.COMPANY)
+            {
+                user.CompanyId = userViewModel.ApplicationUser.CompanyId;
+            }
+
+            if (oldRole == Roles.COMPANY)
+            {
+                user.CompanyId = null;
+            }
+
+            await db.SaveChangesAsync();
+            await userManager.RemoveFromRoleAsync(user, oldRole!);
+            await userManager.AddToRoleAsync(user, userViewModel.ApplicationUser.Role!);
+        }
+
+        TempData["success"] = $"User {userViewModel.ApplicationUser.UserName} successfully updated.";
+
+        return RedirectToAction(nameof(Index));
     }
 
 
