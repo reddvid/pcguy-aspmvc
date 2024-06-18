@@ -18,11 +18,12 @@ public class ApplicationUser : IdentityUser
     public string? State { get; set; }
     [DisplayName("Postal Code")] public string? PostalCode { get; set; }
 
-    [NotMapped] public string? Role { get; init; }
+    [NotMapped] public string? Role { get; set; }
 
     public int? CompanyId { get; set; }
 
     [ForeignKey("CompanyId")]
     [ValidateNever]
-    public Company? Company { get; init; }
+    public Company? Company { get; set; }
+    
 }

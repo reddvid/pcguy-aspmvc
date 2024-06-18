@@ -1,0 +1,74 @@
+@using PCGuy.Helpers
+@model PCGuy.Models.ViewModels.ManageUserViewModel
+
+@{
+    var isCompanyVisible = "display: none;";
+}
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ms-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="py-2">Manage User Permissions</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row">
+            <input asp-for="ApplicationUser!.Id" hidden/>
+            <div class="border p-3">
+                @* <div asp-validation-summary="ModelOnly"></div> *@
+                <div class="form-floating py-2 col-12">
+                    @if (!string.IsNullOrWhiteSpace(Model.ApplicationUser!.Name))
+                    {
+                        <input asp-for="ApplicationUser!.Name" readonly class="form-control border-shadow"/>
+                    }
+                    else
+                    {
+                        <input asp-for="ApplicationUser!.Name" class="form-control border-shadow"/>
+                    }
+                    <label asp-for="ApplicationUser!.Name" class="mx-2"></label>
+                </div>
+
+                <div class="form-floating py-2 col-12">
+                    <select asp-for="ApplicationUser!.Role" asp-items="@Model.RolesList" class="form-select"></select>
+                </div>
+
+                @if (Model.ApplicationUser!.Role == Roles.COMPANY)
+                {
+                    isCompanyVisible = "display: block;";
+                }
+
+                <div class="form-floating py-2 col-12">
+                    <select asp-for="ApplicationUser!.CompanyId" style="@isCompanyVisible" asp-items="@Model.CompanyList" class="form-select"></select>
+                </div>
+
+                <div class="row pt-2">
+                    <div class="col-6 col-md-3">
+                        <button class="btn btn-primary form-control" type="submit">Update Role</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-action="Index" class="btn btn-outline-primary border form-control">Back to Users List</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#ApplicationUser_Role').change(function () {
+                let selection = $('#ApplicationUser_Role Option:Selected').text();
+                if (selection === 'Company') {
+                    $('#ApplicationUser_CompanyId').show();
+                } else {
+                    $('#ApplicationUser_CompanyId').hide();
+                }
+            })
+        })
+    </script>
+}

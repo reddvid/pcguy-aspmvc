@@ -1,0 +1,107 @@
+<div class="row mb-3 ">
+    <div class="col-6">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+</div>
+@* @if (ViewData["Title"]!.Equals("All Products")) *@
+<div class="row">
+    <table id="dataTable" class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Company</th>
+            <th>Role/s</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    @* <script src="~/js/product.js"></script> *@
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            loadDataTable();
+        });
+
+        let dataTable;
+
+        function loadDataTable() {
+            dataTable = $('#dataTable').DataTable({
+                "ajax": {url: '/admin/user/getall'},
+                "columns": [
+                    {data: 'name'},
+                    {data: 'email'},
+                    {data: 'phoneNumber'},
+                    {data: 'company.name'},
+                    {data: 'role'},
+                    {
+                        data: {id: 'id', lockoutEnd: 'lockoutEnd'},
+                        render: function (data) {
+                            let today = new Date().getTime();
+                            let lockout = new Date(data.lockoutEnd).getTime();
+                        
+                            if (lockout > today) {
+                                return `<div class="w-75 btn-group" role="group">
+                                            <a onclick="lockUnlock('${data.id}')" style="cursor: pointer;" class="link-info mx-2" >Unlock</a>
+                                            <a class="link-info mx-2" href="/Admin/User/Manage?userId=${data.id}">Manage</a>
+                                        </div>`
+                            } else {
+                                return `<div class="w-75 btn-group" role="group">
+                                            <a onclick="lockUnlock('${data.id}')" style="cursor: pointer;" class="mx-2 link-danger" >Lock</a>
+                                            <a class="link-info mx-2" href="/Admin/User/Manage?userId=${data.id}" >Manage</a>
+                                        </div>`
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+
+        function lockUnlock(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/Admin/User/LockUnlock/',
+                data: JSON.stringify(id),
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        dataTable.ajax.reload();
+                    }
+                }
+            });
+        }
+
+        function Delete(url) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        success: function (data) {
+                            dataTable.ajax.reload();
+                            toastr.success(data.message);
+                        },
+                        error: function (data) {
+                            dataTable.ajax.reload();
+                            toastr.error(data.message);
+                        }
+                    })
+                }
+            });
+        }
+
+    </script>
+}
