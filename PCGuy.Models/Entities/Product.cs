@@ -11,8 +11,7 @@ public class Product
 {
     [Key] public int Id { get; init; }
     public DateTime UploadDate { get; private set; } = DateTime.Now;
-    [DisplayName("Featured Image")]
-    [ValidateNever] public string? FeaturedImage { get; set; }
+   
     public string[]? ImagePaths { get; init; }
     public string? Name { get; init; }
     public string? Description { get; init; }
@@ -47,4 +46,6 @@ public class Product
     public string? ModelNumber { get; init; }
 
     [ValidateNever] public string[]? Tags { get; init; }
+    
+    [ValidateNever] public List<ProductImage>? ProductImages { get; set; }
 }

@@ -3,7 +3,7 @@ using PCGuy.Models.Entities;
 
 namespace PCGuy.DataAccess.Contracts;
 
-public interface IProductRepository : IRepository<Product>
+public interface IProductImageRepository : IRepository<ProductImage>
 {
-    Task UpdateAsync(Product product);
+    void Update(ProductImage image);
 }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PCGuy.DataAccess.Contracts;
 using PCGuy.Models.Entities;
 using PCGuy.DataAccess.Data;
@@ -8,5 +9,14 @@ public class ProductRepository(ApplicationDbContext db) : Repository<Product>(db
 {
     private readonly ApplicationDbContext _db = db;
 
-    public void Update(Product product) => _db.Products.Update(product);
+    public async Task UpdateAsync(Product product)
+    {
+        var productFromDb = await _db.Products.FirstOrDefaultAsync(o => o.Id == product.Id);
+        if (productFromDb is not null)
+        {
+            productFromDb.ProductImages = product.ProductImages;
+        }
+        
+        _db.Products.Update(product);
+    }
 }

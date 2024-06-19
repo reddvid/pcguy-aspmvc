@@ -19,6 +19,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Company> Companies { get; init; }
     public DbSet<OrderHeader> OrderHeaders { get; init; }
     public DbSet<OrderDetail> OrderDetails { get; init; }
+    
+    public DbSet<ProductImage> ProductImages { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

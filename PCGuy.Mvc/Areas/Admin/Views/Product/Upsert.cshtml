@@ -17,7 +17,7 @@
 <form method="post" class="row" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
         <input asp-for="Product.Id" hidden/>
-        <input asp-for="Product.FeaturedImage" hidden/>
+        @* <input asp-for="Product.FeaturedImage" hidden/> *@
         <div class="row">
             <div class="col-9">
                 <div class="mb-3">
@@ -41,8 +41,8 @@
                     <input asp-for="Product.Stock" class="form-control" required>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Product.FeaturedImage"></label>
-                    <input type="file" name="file" class="form-control">
+                    <input type="file" name="files" class="form-control" multiple>
+                    <label asp-for="Product.ProductImages" class="ms-2"></label>
                 </div>
                 @* ref: https://stackoverflow.com/questions/18382311/populating-a-razor-dropdownlist-from-a-listobject-in-mvc *@
                 <div class="mb-3">
@@ -62,9 +62,9 @@
                     <a class="btn btn-primary" type="button" asp-action="Index" target="_blank" asp-controller="Subcategory">Add New</a>
                 </div>
             </div>
-            <div class="col-3">
-                <img src="@Model.Product.FeaturedImage" alt="@(Model.Product.Name) Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;"/>
-            </div>
+            @* <div class="col-3"> *@
+            @*     <img src="@Model.Product.FeaturedImage" alt="@(Model.Product.Name) Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;"/> *@
+            @* </div> *@
         </div>
 
         <div class="row">
